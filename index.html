@@ -1,0 +1,1366 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Trigonometri Fase E</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: lembar kerja juru ukur — kertas milimeter biru, aksen kuning busur derajat, satu kolom dengan panel simulasi */
+:root{
+  --bg:#F2F5F7; --surface:#FFFFFF; --ink:#13283B; --muted:#56687A; --line:#D3DCE4; --grid:#E4EBF0;
+  --accent:#C98200; --accent2:#1F7A8C; --tint:#FBEFD6; --tint2:#DCEEF1;
+  --good:#2C8752; --bad:#BF3A2B; --goodbg:#E2F3E8; --badbg:#F9E3E0;
+  --f-display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --f-body:"Source Sans 3","Segoe UI",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0F1A24; --surface:#162433; --ink:#E5EDF3; --muted:#9BAFBF; --line:#2A3C4D; --grid:#1B2B3A;
+  --accent:#F0B03C; --accent2:#55B6C7; --tint:#3A2C10; --tint2:#123640;
+  --good:#5FC58C; --bad:#EE6E5E; --goodbg:#16342A; --badbg:#3A1E1B; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F1A24; --surface:#162433; --ink:#E5EDF3; --muted:#9BAFBF; --line:#2A3C4D; --grid:#1B2B3A;
+  --accent:#F0B03C; --accent2:#55B6C7; --tint:#3A2C10; --tint2:#123640;
+  --good:#5FC58C; --bad:#EE6E5E; --goodbg:#16342A; --badbg:#3A1E1B; color-scheme:dark}
+
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.6;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--ink)}
+.wrap{max-width:940px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header.top{background:var(--ink);color:var(--bg)}
+header.top .wrap{padding-block:28px 22px;display:grid;grid-template-columns:1fr auto;gap:16px;align-items:end}
+header.top .eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;opacity:.75}
+header.top h1{font-family:var(--f-display);font-weight:800;font-size:clamp(2.2rem,7vw,3.6rem);line-height:1;margin:.2em 0 .1em;letter-spacing:.01em}
+header.top h1 span{color:var(--accent)}
+header.top p{margin:0;opacity:.85;max-width:52ch}
+.mini-circle{width:92px;height:92px}
+@media (max-width:520px){.mini-circle{display:none} header.top .wrap{grid-template-columns:1fr}}
+
+nav.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
+nav.tabs .wrap{display:flex;gap:6px;overflow-x:auto;padding-block:10px;scrollbar-width:thin}
+nav.tabs a{flex:0 0 auto;text-decoration:none;color:var(--muted);font-weight:600;font-size:15px;padding:7px 13px;border-radius:999px;border:1px solid var(--line);white-space:nowrap}
+nav.tabs a .n{font-family:var(--f-mono);font-size:12px;margin-right:6px;color:var(--accent2)}
+nav.tabs a[aria-current="page"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+nav.tabs a[aria-current="page"] .n{color:var(--accent)}
+nav.tabs a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+.abar{display:flex;align-items:center;gap:10px;padding-block:10px;min-width:0}
+nav.tabs .wrap.abar{overflow:visible}
+.abar .home{flex:0 0 auto;text-decoration:none;font-weight:700;font-size:15px;color:var(--bg);background:var(--ink);padding:7px 14px;border-radius:999px}
+.abar .where{font-family:var(--f-display);font-weight:600;font-size:1.05rem;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chips{display:flex;gap:6px;overflow-x:auto;min-width:0;scrollbar-width:thin}
+.slide.cover{background:var(--ink);color:var(--bg);border-radius:16px;padding:clamp(22px,5vw,48px);min-height:min(620px,88vh);display:flex;align-items:center;
+  background-image:linear-gradient(color-mix(in srgb,var(--bg) 8%,transparent) 1px,transparent 1px),linear-gradient(90deg,color-mix(in srgb,var(--bg) 8%,transparent) 1px,transparent 1px);background-size:24px 24px}
+.cover-in{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:24px;align-items:center;width:100%}
+@media (max-width:700px){.cover-in{grid-template-columns:1fr}.cover-art{max-width:220px;order:-1}}
+.cover .eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.cover h1{font-family:var(--f-display);font-weight:800;font-size:clamp(1.8rem,7.6vw,3.3rem);line-height:.95;margin:.15em 0 .35em;letter-spacing:.01em}
+.cover h1 span{color:var(--accent)}
+.cover small{display:block;font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;opacity:.65}
+.cls{display:flex;gap:28px;flex-wrap:wrap;margin-bottom:22px}
+.cls b{font-size:1.2rem}
+.dev{display:grid;gap:2px;border-left:3px solid var(--accent);padding-left:14px;margin-bottom:26px}
+.dev b{font-family:var(--f-display);font-size:1.3rem}
+.start{display:inline-block;text-decoration:none;font-weight:700;background:var(--accent);color:#1b1300;padding:12px 22px;border-radius:999px;font-size:1.05rem}
+.start:focus-visible,.mcard:focus-visible,.abar a:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.cover-art{width:100%;justify-self:center}
+.cover-art text{font-size:15px}
+.menu-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+@media (max-width:600px){.menu-grid{grid-template-columns:1fr}}
+.mcard{display:grid;grid-template-columns:56px 1fr;grid-template-rows:auto auto auto;column-gap:14px;text-decoration:none;color:inherit;background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:18px}
+.mcard:hover{border-color:var(--ink)}
+.mcard svg{grid-row:1/4;width:52px;height:52px}
+.mcard .mn{font-family:var(--f-mono);font-size:12px;font-weight:700;color:var(--accent2)}
+.mcard b{font-family:var(--f-display);font-size:1.25rem;line-height:1.2}
+.mcard small{color:var(--muted);font-size:14.5px;margin-top:4px}
+.rf-list{display:grid;gap:10px}
+.rf-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;border-bottom:1px solid var(--line);padding-bottom:10px}
+@media (max-width:640px){.rf-row{grid-template-columns:1fr}}
+.rf-row .lv button{font-size:14px;padding:6px 10px}
+.lv button.on0{background:var(--badbg);border-color:var(--bad);color:var(--ink)}
+.lv button.on1{background:var(--tint);border-color:var(--accent);color:var(--ink)}
+.lv button.on2{background:var(--goodbg);border-color:var(--good);color:var(--ink)}
+.rq{display:grid;gap:6px;font-weight:600}
+textarea{font:inherit;font-weight:400;font-size:15.5px;padding:8px 10px;border-radius:8px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);resize:vertical;width:100%;box-sizing:border-box}
+:root{--c1:#C98200;--c2:#1F7A8C;--c3:#C94F3A;--c4:#3B8A57;--c5:#5266B0;--shadow:0 12px 30px -16px rgba(19,40,59,.45)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--c1:#F0B03C;--c2:#55B6C7;--c3:#F07E68;--c4:#68C68C;--c5:#8C9DF0;--shadow:0 12px 30px -14px rgba(0,0,0,.75)}}
+:root[data-theme="dark"]{--c1:#F0B03C;--c2:#55B6C7;--c3:#F07E68;--c4:#68C68C;--c5:#8C9DF0;--shadow:0 12px 30px -14px rgba(0,0,0,.75)}
+#menu,#tujuan,#m1{--sec:var(--c1)} #materi,#m2{--sec:var(--c2)} #m3{--sec:var(--c3)} #m4,#latihan{--sec:var(--c4)} #m5,#refleksi{--sec:var(--c5)}
+input[type=range]{accent-color:var(--sec,var(--accent))}
+.page:not([hidden]){animation:pageIn .45s cubic-bezier(.2,.8,.2,1)}
+@keyframes pageIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.phead{position:relative;overflow:hidden;background:var(--ink);color:var(--bg);border-radius:16px;padding:22px 130px 24px 22px;
+  background-image:linear-gradient(color-mix(in srgb,var(--bg) 7%,transparent) 1px,transparent 1px),linear-gradient(90deg,color-mix(in srgb,var(--bg) 7%,transparent) 1px,transparent 1px);background-size:24px 24px}
+.phead h2{color:var(--bg);position:relative;z-index:1}
+.phead .kicker{color:var(--sec,var(--accent));position:relative;z-index:1}
+.phead::before{content:"";position:absolute;right:-46px;top:-46px;width:170px;height:170px;border-radius:50%;border:2px dashed color-mix(in srgb,var(--sec,var(--accent)) 65%,transparent);animation:spin 40s linear infinite}
+.phead::after{content:attr(data-n);position:absolute;right:20px;bottom:-16px;font-family:var(--f-display);font-weight:800;font-size:104px;line-height:1;color:var(--sec,var(--accent))}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (max-width:560px){.phead{padding-right:22px}.phead::after{font-size:70px;opacity:.3}}
+.panel{border-radius:14px;box-shadow:var(--shadow)}
+.sim{border-color:var(--sec,var(--ink));border-radius:14px;box-shadow:var(--shadow)}
+.sim-head span{color:var(--sec,var(--accent))}
+button{transition:transform .12s,background-color .15s,border-color .15s,box-shadow .15s}
+button:active:not(:disabled){transform:scale(.95)}
+.opt:hover:not(:disabled),.btnrow button:hover:not(:disabled){border-color:var(--sec,var(--ink))}
+.mcard{position:relative;overflow:hidden;border-top:6px solid var(--sec);transition:transform .2s,box-shadow .2s;animation:popIn .55s cubic-bezier(.2,.8,.2,1) both}
+.mcard:nth-child(2){animation-delay:.08s}.mcard:nth-child(3){animation-delay:.16s}.mcard:nth-child(4){animation-delay:.24s}
+.mcard:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:var(--sec)}
+.mcard svg{background:color-mix(in srgb,var(--sec) 18%,transparent);border-radius:14px;padding:8px;width:60px;height:60px;box-sizing:border-box}
+.mcard .mn{color:var(--sec)}
+.mcard::after{content:"";position:absolute;right:-34px;bottom:-34px;width:96px;height:96px;border-radius:50%;background:color-mix(in srgb,var(--sec) 12%,transparent);transition:transform .35s}
+.mcard:hover::after{transform:scale(1.7)}
+.cards a{border-top:5px solid var(--sec,var(--line));border-radius:12px;transition:transform .2s,box-shadow .2s;animation:popIn .5s cubic-bezier(.2,.8,.2,1) both}
+.cards a:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:var(--sec,var(--ink))}
+.cards a b{color:var(--sec,var(--ink))}
+.cards a:nth-child(2){animation-delay:.06s}.cards a:nth-child(3){animation-delay:.12s}.cards a:nth-child(4){animation-delay:.18s}.cards a:nth-child(5){animation-delay:.24s}
+@keyframes popIn{from{opacity:0;transform:translateY(16px) scale(.97)}to{opacity:1;transform:none}}
+.qcard{border-radius:14px;box-shadow:var(--shadow)}
+.qcard.good{animation:pulse .6s}.qcard.bad{animation:shake .45s}
+@keyframes pulse{40%{transform:scale(1.015);box-shadow:0 0 0 5px color-mix(in srgb,var(--good) 35%,transparent)}}
+@keyframes shake{20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
+.start{animation:breathe 2.4s ease-in-out infinite;transition:transform .2s}
+.start:hover{transform:translateY(-2px)}
+@keyframes breathe{50%{box-shadow:0 0 0 10px color-mix(in srgb,var(--accent) 22%,transparent)}}
+.slide.cover{position:relative;overflow:hidden}
+.floaters span{position:absolute;font-family:var(--f-mono);font-size:14px;color:var(--bg);opacity:.16;white-space:nowrap;animation:drift 9s ease-in-out infinite}
+@keyframes drift{50%{transform:translateY(-12px)}}
+@media (max-width:700px){.floaters{display:none}}
+.cover-in{position:relative;z-index:1}
+.snd{display:inline-flex;align-items:center;gap:6px;margin-left:auto;flex:0 0 auto;font-size:14px;padding:6px 11px;border-radius:999px}
+.snd svg{width:18px;height:18px}
+.snd[aria-pressed="false"]{opacity:.6;text-decoration:line-through}
+.snd-cover{position:absolute;top:14px;right:14px;z-index:2;background:transparent;color:var(--bg);border-color:color-mix(in srgb,var(--bg) 45%,transparent)}
+@media (max-width:560px){#sndBtn span{display:none}}
+#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:60}
+.big{color:var(--c4)}
+main{padding-block:28px 40px}
+section.page{display:grid;gap:22px}
+h2{font-family:var(--f-display);font-weight:800;font-size:clamp(1.6rem,4.5vw,2.2rem);line-height:1.15;margin:0;text-wrap:balance}
+h3{font-family:var(--f-display);font-weight:600;font-size:1.25rem;margin:0 0 .4em;text-wrap:balance}
+.kicker{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent2);font-weight:700}
+.prose{max-width:68ch}
+.prose p{margin:.5em 0}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px;min-width:0}
+.box{border-left:4px solid var(--accent);background:var(--tint);padding:12px 16px;border-radius:0 8px 8px 0}
+.box.teal{border-color:var(--accent2);background:var(--tint2)}
+.box strong{font-weight:700}
+.formula{font-family:var(--f-mono);font-size:1.05rem;display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center;padding:6px 0}
+.fr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1.15;margin:0 2px;font-size:.92em}
+.fr>span:first-child{border-bottom:1.5px solid currentColor;padding:0 3px}
+.fr>span:last-child{padding:0 3px}
+.mono{font-family:var(--f-mono)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media (max-width:760px){.two{grid-template-columns:1fr}}
+.two>*{min-width:0}
+
+.sim{background:var(--surface);border:2px solid var(--ink);border-radius:12px;overflow:hidden}
+.sim-head{background:var(--ink);color:var(--bg);padding:10px 16px;display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+.sim-head b{font-family:var(--f-display);font-size:1.05rem}
+.sim-head span{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.sim-body{padding:16px;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:18px;align-items:start}
+@media (max-width:760px){.sim-body{grid-template-columns:1fr}}
+.sim svg{width:100%;height:auto;display:block;max-width:100%}
+.ctrl{display:grid;gap:12px}
+.ctrl label{font-weight:600;font-size:15px;display:flex;justify-content:space-between;gap:8px}
+.ctrl label output{font-family:var(--f-mono);color:var(--accent2)}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.read{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:15px;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.read dt{color:var(--muted)}
+.read dd{margin:0;font-family:var(--f-mono);font-weight:700}
+.steps{font-family:var(--f-mono);font-size:14.5px;background:var(--bg);border:1px dashed var(--line);border-radius:8px;padding:10px 12px;line-height:2}
+.btnrow{display:flex;flex-wrap:wrap;gap:6px}
+button{font:inherit;font-size:15px;font-weight:600;cursor:pointer;border-radius:8px;border:1.5px solid var(--ink);background:var(--surface);color:var(--ink);padding:7px 12px}
+button.primary{background:var(--ink);color:var(--bg)}
+button.on{background:var(--accent);border-color:var(--accent);color:#1b1300}
+button:disabled{opacity:.5;cursor:default}
+input[type=number],input[type=text],select{font:inherit;font-family:var(--f-mono);font-size:15px;padding:7px 10px;border-radius:8px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);min-width:0}
+input[type=number]{width:90px}
+.inrow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+
+table.t{border-collapse:collapse;font-family:var(--f-mono);font-size:14.5px;width:100%;min-width:520px}
+table.t th,table.t td{border:1px solid var(--line);padding:7px 10px;text-align:center}
+table.t th{background:var(--ink);color:var(--bg);font-weight:700}
+table.t td:first-child{font-weight:700;background:var(--tint2)}
+.scroll{overflow-x:auto}
+
+.ex{border-top:1px solid var(--line);padding-top:12px}
+.ex:first-of-type{border-top:0;padding-top:0}
+.ex .q{font-weight:600}
+details.sol{margin-top:6px}
+details.sol summary{cursor:pointer;color:var(--accent2);font-weight:700}
+details.sol div{padding:8px 0 0 14px;border-left:2px solid var(--accent2);margin-top:6px}
+.ex.hasfig{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,250px);gap:16px;align-items:start}
+@media (max-width:640px){.ex.hasfig{grid-template-columns:1fr}.ex-fig{max-width:300px}}
+.ex-t{min-width:0}
+.ex-fig{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:6px}
+.ex-fig svg,#pyFig svg{width:100%;height:auto;display:block}
+.ex-fig .duo{display:grid;grid-template-columns:1fr 1fr;gap:4px}
+
+/* SVG kelas warna */
+.s-ink{fill:var(--ink)} .s-muted{fill:var(--muted)} .s-acc{fill:var(--accent)} .s-acc2{fill:var(--accent2)}
+.s-surf{fill:var(--surface)} .s-tint{fill:var(--tint)} .s-tint2{fill:var(--tint2)} .s-none{fill:none}
+.k-ink{stroke:var(--ink)} .k-muted{stroke:var(--muted)} .k-acc{stroke:var(--accent)} .k-acc2{stroke:var(--accent2)} .k-line{stroke:var(--line)} .k-grid{stroke:var(--grid)}
+svg text{font-family:var(--f-mono);font-size:13px}
+.side{stroke:var(--ink);stroke-width:3;stroke-linecap:round}
+.side.hn{stroke:var(--accent);stroke-width:6}
+.side.hd{stroke:var(--accent2);stroke-width:6}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:14px}
+.legend i{display:inline-block;width:18px;height:6px;border-radius:3px;vertical-align:middle;margin-right:6px}
+
+/* Soal */
+.qcard{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:grid;gap:10px;min-width:0}
+.qcard .qh{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.qcard .num{font-family:var(--f-mono);font-weight:700;color:var(--accent2)}
+.tag{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border-radius:999px;background:var(--tint2);color:var(--accent2);font-weight:700}
+.opts{display:grid;gap:6px}
+.opt{display:flex;gap:10px;align-items:center;text-align:left;font-weight:400;border:1.5px solid var(--line);background:var(--surface);padding:9px 12px}
+.opt .l{font-family:var(--f-mono);font-weight:700;color:var(--muted);min-width:1.2em}
+.opt.sel{border-color:var(--ink);background:var(--tint2)}
+.opt.ok{border-color:var(--good);background:var(--goodbg)}
+.opt.no{border-color:var(--bad);background:var(--badbg)}
+.fb{border-radius:8px;padding:10px 12px;font-size:15.5px}
+.fb.ok{background:var(--goodbg);border:1px solid var(--good)}
+.fb.no{background:var(--badbg);border:1px solid var(--bad)}
+.fb b.t{display:block;margin-bottom:2px}
+.fb.ok b.t{color:var(--good)} .fb.no b.t{color:var(--bad)}
+.jrow{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:8px;align-items:center}
+.qlist{display:grid;gap:14px}
+.scorebar{position:sticky;top:calc(env(safe-area-inset-top,0px) + 58px);z-index:4;background:var(--surface);border:1.5px solid var(--ink);border-radius:10px;padding:10px 14px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.bar{flex:1 1 160px;height:10px;background:var(--grid);border-radius:5px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
+.big{font-family:var(--f-display);font-weight:800;font-size:2.4rem;line-height:1}
+.tp-list{counter-reset:tp;list-style:none;padding:0;margin:0;display:grid;gap:10px}
+.tp-list li{display:block;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px}
+.tp-list li::before{content:none;font-family:var(--f-mono);font-size:12px;font-weight:700;color:var(--accent2);padding-top:3px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.cards a{display:block;text-decoration:none;color:inherit;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px}
+.cards a:hover{border-color:var(--ink)}
+.cards a b{font-family:var(--f-display);display:block;font-size:1.05rem}
+.cards a small{color:var(--muted)}
+.pager{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.pager a{text-decoration:none;font-weight:700;color:var(--accent2)}
+footer{border-top:1px solid var(--line);background:var(--surface)}
+footer .wrap{padding-block:18px;font-size:14px;color:var(--muted);display:grid;gap:4px}
+footer b{color:var(--ink)}
+.copy{font-size:13px;padding:3px 8px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<nav class="tabs" id="appbar" aria-label="Navigasi">
+  <div class="wrap abar">
+    <a href="#menu" class="home">Menu</a>
+    <span class="where" id="where">Trigonometri</span>
+    <div class="chips" id="navlist">
+      <a href="#m1"><span class="n">01</span>Satuan Sudut</a>
+      <a href="#m2"><span class="n">02</span>Konversi</a>
+      <a href="#m3"><span class="n">03</span>Rasio</a>
+      <a href="#m4"><span class="n">04</span>Menghitung</a>
+      <a href="#m5"><span class="n">05</span>Masalah</a>
+    </div>
+    <button class="snd" id="sndBtn" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Suara</span></button>
+  </div>
+</nav>
+
+<main class="wrap">
+
+<!-- ================= SLIDE 1: JUDUL ================= -->
+<section class="page slide cover" id="judul">
+  <button class="snd snd-cover" id="sndBtn2" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Suara</span></button>
+  <div class="floaters" aria-hidden="true"><span style="left:6%;top:8%">sin²θ + cos²θ = 1</span><span style="left:58%;top:6%;animation-delay:-3s">π rad = 180°</span><span style="left:8%;bottom:7%;animation-delay:-5s">tan θ = sin θ / cos θ</span><span style="right:6%;bottom:9%;animation-delay:-2s">c² = a² + b²</span><span style="left:46%;bottom:4%;animation-delay:-7s">csc θ = 1 / sin θ</span></div>
+  <div class="cover-in">
+    <div class="cover-text">
+      <div class="eyebrow">Media Pembelajaran Interaktif</div>
+      <h1>TRIGO<span>NOMETRI</span></h1>
+      <div class="cls">
+        <div><small>Mata pelajaran</small><b>Matematika</b></div>
+        <div><small>Kelas</small><b>X SMA · Fase E</b></div>
+      </div>
+      <div class="dev">
+        <small>Nama pengembang</small>
+        <b>Noadi Girsang, S.Pd.Gr</b>
+        <span>SMAN 2 Tangerang</span>
+        <span class="mono" style="font-size:13px">noadigirsang21@guru.sma.belajar.id</span>
+      </div>
+      <a class="start" href="#menu">Mulai belajar →</a>
+    </div>
+    <svg class="cover-art" id="coverArt" viewBox="0 0 260 260" aria-hidden="true"></svg>
+  </div>
+</section>
+
+<!-- ================= SLIDE 2: MENU ================= -->
+<section class="page slide" id="menu" hidden>
+  <div><div class="kicker">Menu Pembelajaran</div><h2>Trigonometri · Kelas X</h2></div>
+  <div class="menu-grid">
+    <a href="#tujuan" class="mcard" style="--sec:var(--c1)">
+      <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="18" class="s-none k-ink" stroke-width="3"/><circle cx="24" cy="24" r="10" class="s-none k-acc2" stroke-width="3"/><circle cx="24" cy="24" r="3.5" class="s-acc"/></svg>
+      <span class="mn">01</span><b>Tujuan Pembelajaran</b><small>Lima kemampuan yang akan kamu capai dan cara belajar dengan media ini.</small></a>
+    <a href="#materi" class="mcard" style="--sec:var(--c2)">
+      <svg viewBox="0 0 48 48" aria-hidden="true"><polygon points="8,40 40,40 40,10" class="s-tint2 k-ink" stroke-width="3" stroke-linejoin="round"/><polyline points="34,40 34,34 40,34" class="s-none k-ink" stroke-width="2"/><path d="M17 40 A9 9 0 0 0 15.2 34.6" class="s-none k-acc" stroke-width="3"/></svg>
+      <span class="mn">02</span><b>Materi Ajar</b><small>5 materi lengkap dengan contoh bergambar, simulasi interaktif, dan cek cepat.</small></a>
+    <a href="#latihan" class="mcard" style="--sec:var(--c4)">
+      <svg viewBox="0 0 48 48" aria-hidden="true"><rect x="9" y="6" width="30" height="36" rx="3" class="s-surf k-ink" stroke-width="3"/><polyline points="15,18 19,22 26,14" class="s-none k-acc2" stroke-width="3"/><line x1="15" y1="30" x2="33" y2="30" class="k-line" stroke-width="3"/><line x1="15" y1="36" x2="28" y2="36" class="k-line" stroke-width="3"/></svg>
+      <span class="mn">03</span><b>Latihan Soal</b><small>15 soal bervariasi dengan skor dan pembahasan setiap soal.</small></a>
+    <a href="#refleksi" class="mcard" style="--sec:var(--c5)">
+      <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 10 H40 V32 H22 L13 40 V32 H8 Z" class="s-tint k-ink" stroke-width="3" stroke-linejoin="round"/><line x1="15" y1="18" x2="33" y2="18" class="k-acc" stroke-width="3"/><line x1="15" y1="25" x2="27" y2="25" class="k-acc" stroke-width="3"/></svg>
+      <span class="mn">04</span><b>Refleksi Pembelajaran</b><small>Nilai pemahamanmu sendiri dan tulis catatan belajar.</small></a>
+  </div>
+  <div class="pager"><a href="#judul">← Halaman judul</a><a href="#tujuan">Mulai dari Tujuan Pembelajaran →</a></div>
+</section>
+
+<!-- ================= TUJUAN ================= -->
+<section class="page" id="tujuan" hidden>
+  <div><div class="kicker">Trigonometri · Kelas X</div><h2>Tujuan Pembelajaran</h2></div>
+  <div class="prose">
+    <p>Seorang juru ukur bisa menentukan tinggi menara, lebar sungai, atau jarak kapal hanya dengan sebuah alat pengukur sudut dan satu jarak yang diketahui. Kuncinya adalah <strong>trigonometri</strong>: ilmu tentang hubungan antara besar sudut dan panjang sisi segitiga.</p>
+  </div>
+  <div class="panel">
+    <h3>Setelah mempelajari media ini, kamu diharapkan mampu:</h3>
+    <ol class="tp-list">
+      <li>Memahami satuan ukuran sudut dalam radian dan derajat.</li>
+      <li>Mengubah satuan ukuran sudut dari bentuk radian ke bentuk derajat dan sebaliknya.</li>
+      <li>Memahami rasio (perbandingan) trigonometri sinus, cosinus, tangen, secan, cosecan, dan cotangen pada segitiga siku-siku.</li>
+      <li>Menghitung rasio trigonometri sinus, cosinus, tangen, secan, cosecan, dan cotangen pada segitiga siku-siku.</li>
+      <li>Menyelesaikan masalah menggunakan rasio trigonometri sinus, cosinus, tangen, cosecan, secan, dan cotangen.</li>
+    </ol>
+  </div>
+  <div class="box teal"><strong>Cara belajar:</strong> baca penjelasan, coba contoh soal tanpa melihat pembahasan, lalu mainkan simulasinya sampai kamu bisa menebak hasilnya sebelum menggeser slider. Setelah semua materi, kerjakan latihan soal dan isi refleksi.</div>
+  <div class="pager"><a href="#menu">← Menu</a><a href="#materi">Materi Ajar →</a></div>
+</section>
+
+<!-- ================= MATERI AJAR ================= -->
+<section class="page" id="materi" hidden>
+  <div><div class="kicker">Materi Ajar</div><h2>Pilih materi</h2></div>
+  <p class="prose" style="margin:0">Pelajari secara berurutan dari Materi 01. Setiap materi berisi penjelasan, contoh soal bergambar, simulasi interaktif, dan cek cepat.</p>
+  <div class="cards">
+    <a href="#m1" style="--sec:var(--c1)"><b>01 · Satuan Sudut</b><small>TP 1 · Derajat, menit, detik, dan radian. Simulasi busur lingkaran.</small></a>
+    <a href="#m2" style="--sec:var(--c2)"><b>02 · Konversi Sudut</b><small>TP 2 · Derajat ⇄ radian. Konverter langkah demi langkah dan latih kilat.</small></a>
+    <a href="#m3" style="--sec:var(--c3)"><b>03 · Rasio Trigonometri</b><small>TP 3 · Sisi depan, samping, miring. Simulasi segitiga siku-siku.</small></a>
+    <a href="#m4" style="--sec:var(--c4)"><b>04 · Menghitung Rasio</b><small>TP 4 · Teorema Pythagoras dan sudut istimewa. Kalkulator enam rasio.</small></a>
+    <a href="#m5" style="--sec:var(--c5)"><b>05 · Pemecahan Masalah</b><small>TP 5 · Sudut elevasi, depresi, dan tangga. Simulasi juru ukur.</small></a>
+  </div>
+  <div class="pager"><a href="#menu">← Menu</a><a href="#m1">Mulai Materi 01 →</a></div>
+</section>
+
+<!-- ================= REFLEKSI ================= -->
+<section class="page" id="refleksi" hidden>
+  <div><div class="kicker">Refleksi Pembelajaran</div><h2>Seberapa jauh kamu sudah paham?</h2></div>
+  <p class="prose" style="margin:0">Jawab dengan jujur. Refleksi ini membantumu mengetahui bagian mana yang sudah dikuasai dan bagian mana yang perlu dipelajari lagi.</p>
+  <div class="panel">
+    <h3>Penilaian diri per tujuan pembelajaran</h3>
+    <div class="rf-list" id="rfList"></div>
+  </div>
+  <div class="panel" style="display:grid;gap:14px">
+    <h3 style="margin:0">Pertanyaan refleksi</h3>
+    <label class="rq" for="rf1">1. Bagian materi mana yang paling mudah kamu pahami? Mengapa?<textarea id="rf1" rows="2"></textarea></label>
+    <label class="rq" for="rf2">2. Bagian mana yang masih sulit? Apa yang membuatnya sulit?<textarea id="rf2" rows="2"></textarea></label>
+    <label class="rq" for="rf3">3. Tuliskan satu contoh penggunaan trigonometri dalam kehidupan sehari-hari di sekitarmu.<textarea id="rf3" rows="2"></textarea></label>
+    <label class="rq" for="rf4">4. Simulasi mana yang paling membantumu belajar?<textarea id="rf4" rows="2"></textarea></label>
+    <label class="rq" for="rf5">5. Apa yang akan kamu lakukan untuk meningkatkan pemahamanmu?<textarea id="rf5" rows="2"></textarea></label>
+    <div><button class="primary" id="rfBtn">Lihat ringkasan refleksi</button></div>
+  </div>
+  <div class="panel" id="rfOut" hidden></div>
+  <div class="pager"><a href="#latihan">← Latihan Soal</a><a href="#menu">Kembali ke Menu</a></div>
+</section>
+
+<!-- ================= M1 ================= -->
+<section class="page" id="m1" hidden>
+  <div><div class="kicker">Materi 01 · TP 1</div><h2>Satuan ukuran sudut: derajat dan radian</h2></div>
+  <div class="prose">
+    <p><strong>Sudut</strong> terbentuk dari dua sinar yang berpangkal di satu titik (titik sudut). Besar sudut menyatakan seberapa jauh satu sinar diputar terhadap sinar lainnya. Ada dua satuan yang paling sering dipakai: <strong>derajat</strong> dan <strong>radian</strong>.</p>
+  </div>
+  <div class="two">
+    <div class="panel">
+      <h3>Derajat (°)</h3>
+      <p>Satu putaran penuh dibagi menjadi 360 bagian sama besar. Satu bagian disebut <strong>satu derajat</strong>.</p>
+      <div class="formula"><span>1 putaran = 360°</span><span>1° = <span class="fr"><span>1</span><span>360</span></span> putaran</span></div>
+      <p>Untuk ukuran yang lebih teliti, derajat dibagi lagi:</p>
+      <div class="formula"><span>1° = 60′ (menit)</span><span>1′ = 60″ (detik)</span><span>1° = 3.600″</span></div>
+      <p>Jenis sudut: lancip (0° &lt; θ &lt; 90°), siku-siku (90°), tumpul (90° &lt; θ &lt; 180°), lurus (180°), refleks (180° &lt; θ &lt; 360°).</p>
+    </div>
+    <div class="panel">
+      <h3>Radian (rad)</h3>
+      <p><strong>Satu radian</strong> adalah besar sudut pusat lingkaran yang menghadap busur yang <strong>panjangnya sama dengan jari-jari</strong> lingkaran itu.</p>
+      <div class="formula"><span>θ (rad) = <span class="fr"><span>panjang busur s</span><span>jari-jari r</span></span></span></div>
+      <p>Keliling lingkaran = 2πr, sehingga satu putaran penuh memuat 2π buah jari-jari:</p>
+      <div class="formula"><span>1 putaran = 2π rad</span><span>1 rad ≈ 57,3°</span></div>
+      <p>Radian tidak bergantung pada ukuran lingkaran, karena merupakan perbandingan dua panjang.</p>
+    </div>
+  </div>
+
+  <div class="sim" id="sim1">
+    <div class="sim-head"><b>Simulasi 1 · Busur dan Radian</b><span>geser sudut dan jari-jari</span></div>
+    <div class="sim-body">
+      <svg id="s1svg" viewBox="0 0 320 320" role="img" aria-label="Lingkaran dengan juring sudut yang dapat diatur"></svg>
+      <div class="ctrl">
+        <label for="s1deg">Besar sudut θ <output id="s1degO">60°</output></label>
+        <input type="range" id="s1deg" min="0" max="360" step="1" value="60">
+        <label for="s1r">Jari-jari r <output id="s1rO">5 cm</output></label>
+        <input type="range" id="s1r" min="1" max="10" step="1" value="5">
+        <div class="btnrow">
+          <button id="s1one">Tunjukkan 1 radian</button>
+          <button data-d="90">90°</button><button data-d="180">180°</button><button data-d="360">360°</button>
+        </div>
+        <dl class="read" id="s1read"></dl>
+        <p style="margin:0;font-size:14.5px;color:var(--muted)">Angka 1–6 di tepi lingkaran menandai busur sepanjang 1r, 2r, …, 6r. Satu putaran memuat sekitar 6,28 jari-jari, yaitu 2π.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>Contoh soal</h3>
+    <div class="ex"><p class="q">1. Nyatakan 45°30′ dalam derajat desimal.</p>
+      <details class="sol"><summary>Lihat pembahasan</summary><div>30′ = <span class="fr"><span>30</span><span>60</span></span>° = 0,5°. Jadi 45°30′ = 45,5°.</div></details></div>
+    <div class="ex"><p class="q">2. Nyatakan 12,25° dalam derajat, menit, dan detik.</p>
+      <details class="sol"><summary>Lihat pembahasan</summary><div>0,25° = 0,25 × 60′ = 15′. Jadi 12,25° = 12°15′0″.</div></details></div>
+    <div class="ex"><p class="q">3. Sebuah lingkaran berjari-jari 8 cm. Busur yang panjangnya 20 cm menghadap sudut pusat berapa radian?</p>
+      <details class="sol"><summary>Lihat pembahasan</summary><div>θ = s / r = 20 / 8 = 2,5 rad.</div></details></div>
+    <div class="ex"><p class="q">4. Jarum menit jam berputar selama 20 menit. Berapa besar sudut yang ditempuh dalam derajat?</p>
+      <details class="sol"><summary>Lihat pembahasan</summary><div>60 menit = 1 putaran = 360°. Maka 20 menit = <span class="fr"><span>20</span><span>60</span></span> × 360° = 120°.</div></details></div>
+  </div>
+  <div><h3>Cek cepat</h3><div class="qlist" id="cq-m1"></div></div>
+  <div class="pager"><a href="#materi">← Materi Ajar</a><a href="#m2">Materi 02: Konversi →</a></div>
+</section>
+
+<!-- ================= M2 ================= -->
+<section class="page" id="m2" hidden>
+  <div><div class="kicker">Materi 02 · TP 2</div><h2>Mengubah derajat ke radian dan sebaliknya</h2></div>
+  <div class="prose">
+    <p>Karena satu putaran = 360° = 2π rad, kita peroleh hubungan dasar yang menjadi kunci semua konversi:</p>
+  </div>
+  <div class="box"><div class="formula" style="font-size:1.2rem"><strong>π rad = 180°</strong></div></div>
+  <div class="two">
+    <div class="panel"><h3>Derajat → radian</h3>
+      <p>Kalikan dengan <span class="fr"><span>π</span><span>180°</span></span></p>
+      <div class="formula"><span>θ rad = θ° × <span class="fr"><span>π</span><span>180°</span></span></span></div>
+      <p>Contoh: 60° = 60 × <span class="fr"><span>π</span><span>180</span></span> = <span class="fr"><span>π</span><span>3</span></span> rad.</p></div>
+    <div class="panel"><h3>Radian → derajat</h3>
+      <p>Kalikan dengan <span class="fr"><span>180°</span><span>π</span></span></p>
+      <div class="formula"><span>θ° = θ rad × <span class="fr"><span>180°</span><span>π</span></span></span></div>
+      <p>Contoh: <span class="fr"><span>3π</span><span>4</span></span> rad = <span class="fr"><span>3 × 180°</span><span>4</span></span> = 135°.</p></div>
+  </div>
+  <div class="panel">
+    <h3>Tabel sudut yang sering dipakai</h3>
+    <div class="scroll"><table class="t">
+      <tr><th>Derajat</th><td>0°</td><td>30°</td><td>45°</td><td>60°</td><td>90°</td><td>120°</td><td>135°</td><td>150°</td><td>180°</td><td>270°</td><td>360°</td></tr>
+      <tr><th>Radian</th><td>0</td><td>π/6</td><td>π/4</td><td>π/3</td><td>π/2</td><td>2π/3</td><td>3π/4</td><td>5π/6</td><td>π</td><td>3π/2</td><td>2π</td></tr>
+    </table></div>
+    <p style="margin-bottom:0;color:var(--muted);font-size:15px">Tips: hafalkan π = 180°, lalu cukup ganti π dengan 180° saat mengubah radian berbentuk π ke derajat.</p>
+  </div>
+
+  <div class="sim">
+    <div class="sim-head"><b>Simulasi 2 · Konverter Langkah demi Langkah</b><span>ketik nilai, lihat caranya</span></div>
+    <div style="padding:16px;display:grid;gap:16px">
+      <div class="two">
+        <div class="ctrl">
+          <b>Derajat → Radian</b>
+          <div class="inrow"><input type="number" id="c2deg" value="225" step="any" aria-label="Besar sudut dalam derajat"> <span>°</span></div>
+          <div class="steps" id="c2degOut"></div>
+        </div>
+        <div class="ctrl">
+          <b>Radian (bentuk π) → Derajat</b>
+          <div class="inrow"><input type="number" id="c2p" value="7" step="1" aria-label="Pembilang"><span>π /</span><input type="number" id="c2q" value="6" step="1" aria-label="Penyebut"><span>rad</span></div>
+          <div class="steps" id="c2radOut"></div>
+        </div>
+      </div>
+      <div class="ctrl">
+        <b>Radian desimal (tanpa π) → Derajat</b>
+        <div class="inrow"><input type="number" id="c2r" value="2" step="any" aria-label="Radian desimal"><span>rad</span></div>
+        <div class="steps" id="c2rOut"></div>
+      </div>
+      <div class="panel" style="background:var(--bg)">
+        <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center">
+          <b style="font-family:var(--f-display);font-size:1.1rem">Latih Kilat</b>
+          <span class="mono">Benar beruntun: <b id="drStreak">0</b> · Total benar: <b id="drTotal">0</b></span>
+        </div>
+        <p id="drQ" style="font-size:1.15rem;font-weight:700;margin:.4em 0"></p>
+        <div class="btnrow" id="drOpts"></div>
+        <p id="drFb" style="margin:.5em 0 0;min-height:1.6em"></p>
+        <button id="drNext" class="primary">Soal berikutnya</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>Contoh soal</h3>
+    <div class="ex"><p class="q">1. Ubah 210° ke radian.</p>
+      <details class="sol"><summary>Lihat pembahasan</summary><div>210 × <span class="fr"><span>π</span><span>180</span></span> = <span class="fr"><span>210π</span><span>180</span></span> = <span class="fr"><span>7π</span><span>6</span></span> rad.</div></details></div>
+    <div class="ex"><p class="q">2. Ubah <span class="fr"><span>5π</span><span>12</span></span> rad ke derajat.</p>
+      <details class="sol"><summary>Lihat pembahasan</summary><div><span class="fr"><span>5 × 180°</span><span>12</span></span> = <span class="fr"><span>900°</span><span>12</span></span> = 75°.</div></details></div>
+    <div class="ex"><p class="q">3. Ubah 1,5 rad ke derajat (π ≈ 3,14).</p>
+      <details class="sol"><summary>Lihat pembahasan</summary><div>1,5 × <span class="fr"><span>180°</span><span>3,14</span></span> = <span class="fr"><span>270°</span><span>3,14</span></span> ≈ 85,99°.</div></details></div>
+    <div class="ex"><p class="q">4. Roda berputar 3 putaran. Nyatakan sudut putarnya dalam radian dan derajat.</p>
+      <details class="sol"><summary>Lihat pembahasan</summary><div>1 putaran = 2π rad = 360°. Jadi 3 putaran = 6π rad = 1.080°.</div></details></div>
+  </div>
+  <div><h3>Cek cepat</h3><div class="qlist" id="cq-m2"></div></div>
+  <div class="pager"><a href="#m1">← Materi 01</a><a href="#m3">Materi 03: Rasio Trigonometri →</a></div>
+</section>
+
+<!-- ================= M3 ================= -->
+<section class="page" id="m3" hidden>
+  <div><div class="kicker">Materi 03 · TP 3</div><h2>Rasio trigonometri pada segitiga siku-siku</h2></div>
+  <div class="prose">
+    <p>Pada segitiga siku-siku, sisi-sisinya diberi nama berdasarkan <strong>sudut acuan</strong> (sudut lancip yang sedang kita perhatikan), misalnya sudut α:</p>
+    <ul>
+      <li><strong>Sisi miring (hipotenusa)</strong>: sisi terpanjang, berhadapan dengan sudut siku-siku.</li>
+      <li><strong>Sisi depan</strong>: sisi yang berhadapan dengan sudut α.</li>
+      <li><strong>Sisi samping</strong>: sisi yang mengapit sudut α selain sisi miring.</li>
+    </ul>
+    <p>Jika sudut acuan diganti ke sudut lancip yang lain, sisi depan dan sisi samping <strong>bertukar</strong>, sedangkan sisi miring tetap.</p>
+  </div>
+  <div class="panel">
+    <h3>Enam rasio trigonometri</h3>
+    <div class="scroll"><table class="t">
+      <tr><th>Rasio</th><th>Definisi</th><th>Singkatan</th><th>Kebalikan dari</th></tr>
+      <tr><td>sin α</td><td><span class="fr"><span>depan</span><span>miring</span></span></td><td>de/mi</td><td>csc α</td></tr>
+      <tr><td>cos α</td><td><span class="fr"><span>samping</span><span>miring</span></span></td><td>sa/mi</td><td>sec α</td></tr>
+      <tr><td>tan α</td><td><span class="fr"><span>depan</span><span>samping</span></span></td><td>de/sa</td><td>cot α</td></tr>
+      <tr><td>csc α</td><td><span class="fr"><span>miring</span><span>depan</span></span></td><td>mi/de</td><td><span class="fr"><span>1</span><span>sin α</span></span></td></tr>
+      <tr><td>sec α</td><td><span class="fr"><span>miring</span><span>samping</span></span></td><td>mi/sa</td><td><span class="fr"><span>1</span><span>cos α</span></span></td></tr>
+      <tr><td>cot α</td><td><span class="fr"><span>samping</span><span>depan</span></span></td><td>sa/de</td><td><span class="fr"><span>1</span><span>tan α</span></span></td></tr>
+    </table></div>
+  </div>
+  <div class="two">
+    <div class="box"><strong>Jembatan keledai: "Sin-demi, Cos-sami, Tan-desa"</strong><br>sin = de/mi, cos = sa/mi, tan = de/sa. Tiga rasio sisanya tinggal dibalik.</div>
+    <div class="box teal"><strong>Hubungan penting</strong><br>tan α = <span class="fr"><span>sin α</span><span>cos α</span></span> &nbsp;dan&nbsp; sin α = cos(90° − α).<br>Nilai rasio hanya bergantung pada besar sudut, <em>bukan</em> pada ukuran segitiga.</div>
+  </div>
+
+  <div class="sim">
+    <div class="sim-head"><b>Simulasi 3 · Segitiga Siku-siku Hidup</b><span>pilih rasio, ubah sudut & ukuran</span></div>
+    <div class="sim-body">
+      <div>
+        <svg id="s3svg" viewBox="0 0 340 320" role="img" aria-label="Segitiga siku-siku ABC dengan sisi yang disorot"></svg>
+        <div class="legend"><span><i style="background:var(--accent)"></i>pembilang</span><span><i style="background:var(--accent2)"></i>penyebut</span></div>
+      </div>
+      <div class="ctrl">
+        <div><b style="font-size:15px">Sudut acuan</b>
+          <div class="btnrow" id="s3ref" style="margin-top:6px"><button data-r="A" class="on">α di A</button><button data-r="B">β di B</button></div></div>
+        <div><b style="font-size:15px">Pilih rasio</b>
+          <div class="btnrow" id="s3rat" style="margin-top:6px">
+            <button data-k="sin" class="on">sin</button><button data-k="cos">cos</button><button data-k="tan">tan</button>
+            <button data-k="csc">csc</button><button data-k="sec">sec</button><button data-k="cot">cot</button></div></div>
+        <label for="s3a">Sudut α (di A) <output id="s3aO">35°</output></label>
+        <input type="range" id="s3a" min="10" max="80" value="35">
+        <label for="s3h">Panjang sisi miring AB <output id="s3hO">8</output></label>
+        <input type="range" id="s3h" min="4" max="10" step="0.5" value="8">
+        <div class="steps" id="s3out"></div>
+        <dl class="read" id="s3all"></dl>
+      </div>
+    </div>
+  </div>
+  <div class="box teal">Coba: kunci sudut α, lalu geser panjang sisi miring. Panjang sisi berubah, tetapi semua nilai rasio tetap. Inilah alasan rasio trigonometri bisa dipakai untuk segitiga sebangun berukuran berapa pun.</div>
+
+  <div class="panel">
+    <h3>Contoh soal</h3>
+    <div class="ex"><p class="q">1. Segitiga PQR siku-siku di Q dengan PQ = 8, QR = 15, PR = 17. Tentukan keenam rasio trigonometri sudut P.</p>
+      <details class="sol"><summary>Lihat pembahasan</summary><div>Acuan sudut P: depan = QR = 15, samping = PQ = 8, miring = PR = 17.<br>
+      sin P = 15/17, cos P = 8/17, tan P = 15/8, csc P = 17/15, sec P = 17/8, cot P = 8/15.</div></details></div>
+    <div class="ex"><p class="q">2. Pada segitiga yang sama, tentukan sin R dan tan R.</p>
+      <details class="sol"><summary>Lihat pembahasan</summary><div>Acuan sudut R: depan = PQ = 8, samping = QR = 15, miring = 17.<br>sin R = 8/17 dan tan R = 8/15. Perhatikan sin R = cos P, karena P + R = 90°.</div></details></div>
+    <div class="ex"><p class="q">3. Jika cos α = 0,6, tentukan sec α.</p>
+      <details class="sol"><summary>Lihat pembahasan</summary><div>sec α = 1 / cos α = 1 / 0,6 = <span class="fr"><span>5</span><span>3</span></span>.</div></details></div>
+  </div>
+  <div><h3>Cek cepat</h3><div class="qlist" id="cq-m3"></div></div>
+  <div class="pager"><a href="#m2">← Materi 02</a><a href="#m4">Materi 04: Menghitung Rasio →</a></div>
+</section>
+
+<!-- ================= M4 ================= -->
+<section class="page" id="m4" hidden>
+  <div><div class="kicker">Materi 04 · TP 4</div><h2>Menghitung nilai rasio trigonometri</h2></div>
+  <div class="prose">
+    <p>Untuk menghitung keenam rasio, kita perlu ketiga panjang sisi. Jika baru dua sisi yang diketahui, cari sisi ketiga dengan <strong>Teorema Pythagoras</strong>:</p>
+  </div>
+  <div class="panel">
+    <h3>Teorema Pythagoras</h3>
+    <div class="two" style="align-items:center">
+      <div id="pyFig" style="max-width:340px;justify-self:center;width:100%"></div>
+      <div>
+        <p style="margin-top:0">Pada segitiga ABC siku-siku di C, sisi <b>c</b> (AB) adalah sisi miring yang berhadapan dengan sudut siku-siku. Sisi <b>a</b> (BC) dan <b>b</b> (AC) adalah sisi siku-siku. Luas persegi pada sisi miring sama dengan jumlah luas persegi pada kedua sisi siku-siku.</p>
+        <div class="box" style="display:grid;gap:4px">
+          <div class="formula" style="font-size:1.25rem"><strong>c<sup>2</sup> = a<sup>2</sup> + b<sup>2</sup></strong></div>
+          <div class="formula"><span>c = √(a<sup>2</sup> + b<sup>2</sup>)</span></div>
+          <div class="formula"><span>a<sup>2</sup> = c<sup>2</sup> − b<sup>2</sup></span><span>a = √(c<sup>2</sup> − b<sup>2</sup>)</span></div>
+          <div class="formula"><span>b<sup>2</sup> = c<sup>2</sup> − a<sup>2</sup></span><span>b = √(c<sup>2</sup> − a<sup>2</sup>)</span></div>
+        </div>
+        <p>Pada gambar: a = 3, b = 4, sehingga c<sup>2</sup> = 3<sup>2</sup> + 4<sup>2</sup> = 9 + 16 = 25 dan c = √25 = 5.</p>
+        <p style="margin-bottom:0">Dalam istilah trigonometri: <b>miring<sup>2</sup> = depan<sup>2</sup> + samping<sup>2</sup></b>.<br><span style="color:var(--muted)">Tripel Pythagoras yang sering muncul: (3, 4, 5), (5, 12, 13), (8, 15, 17), (7, 24, 25), (6, 8, 10).</span></p>
+      </div>
+    </div>
+  </div>
+  <div class="panel">
+    <h3>Langkah menghitung</h3>
+    <ol style="margin:0;padding-left:1.2em">
+      <li>Gambar segitiga siku-siku dan tandai sudut acuan.</li>
+      <li>Tentukan sisi depan, samping, dan miring.</li>
+      <li>Cari sisi yang belum diketahui dengan Pythagoras.</li>
+      <li>Tulis rasio sesuai definisinya, lalu sederhanakan. Jika penyebut berbentuk akar, rasionalkan.</li>
+    </ol>
+  </div>
+  <div class="panel">
+    <h3>Nilai sudut istimewa</h3>
+    <p style="margin-top:0">Diturunkan dari segitiga siku-siku sama kaki (45°–45°–90°, sisi 1 : 1 : √2) dan setengah segitiga sama sisi (30°–60°–90°, sisi 1 : √3 : 2).</p>
+    <div class="scroll"><table class="t">
+      <tr><th>α</th><th>0°</th><th>30°</th><th>45°</th><th>60°</th><th>90°</th></tr>
+      <tr><td>sin</td><td>0</td><td>½</td><td>½√2</td><td>½√3</td><td>1</td></tr>
+      <tr><td>cos</td><td>1</td><td>½√3</td><td>½√2</td><td>½</td><td>0</td></tr>
+      <tr><td>tan</td><td>0</td><td>⅓√3</td><td>1</td><td>√3</td><td>tak terdefinisi</td></tr>
+      <tr><td>csc</td><td>tak terdefinisi</td><td>2</td><td>√2</td><td>⅔√3</td><td>1</td></tr>
+      <tr><td>sec</td><td>1</td><td>⅔√3</td><td>√2</td><td>2</td><td>tak terdefinisi</td></tr>
+      <tr><td>cot</td><td>tak terdefinisi</td><td>√3</td><td>1</td><td>⅓√3</td><td>0</td></tr>
+    </table></div>
+  </div>
+
+  <div class="sim">
+    <div class="sim-head"><b>Simulasi 4 · Kalkulator Enam Rasio</b><span>masukkan dua sisi</span></div>
+    <div class="sim-body">
+      <div><svg id="s4svg" viewBox="0 0 340 260" role="img" aria-label="Segitiga hasil perhitungan"></svg></div>
+      <div class="ctrl">
+        <label for="s4mode" style="display:block">Sisi yang diketahui (terhadap sudut α)</label>
+        <select id="s4mode">
+          <option value="ds">sisi depan & sisi samping</option>
+          <option value="dm">sisi depan & sisi miring</option>
+          <option value="sm">sisi samping & sisi miring</option>
+        </select>
+        <div class="inrow"><span id="s4l1">Depan</span><input type="number" id="s4x" value="5" min="1" max="99" step="1"><span id="s4l2">Samping</span><input type="number" id="s4y" value="12" min="1" max="99" step="1"></div>
+        <div class="btnrow"><button id="s4rand">Acak bilangan</button><button data-p="3,4">3–4</button><button data-p="1,1">1–1</button><button data-p="1,2">1–2</button></div>
+        <div class="steps" id="s4steps"></div>
+      </div>
+    </div>
+    <div style="padding:0 16px 16px"><div class="scroll"><table class="t" id="s4tab"></table></div></div>
+  </div>
+
+  <div class="panel">
+    <h3>Contoh soal</h3>
+    <div class="ex"><p class="q">1. Diketahui tan α = <span class="fr"><span>3</span><span>4</span></span> dengan α sudut lancip. Tentukan sin α, cos α, dan csc α.</p>
+      <details class="sol"><summary>Lihat pembahasan</summary><div>tan α = de/sa = 3/4, maka depan = 3, samping = 4.<br>miring = √(3² + 4²) = √25 = 5.<br>sin α = 3/5, cos α = 4/5, csc α = 5/3.</div></details></div>
+    <div class="ex"><p class="q">2. Diketahui sin α = <span class="fr"><span>2</span><span>3</span></span>, α lancip. Tentukan cos α dan tan α.</p>
+      <details class="sol"><summary>Lihat pembahasan</summary><div>depan = 2, miring = 3. samping = √(3² − 2²) = √5.<br>cos α = √5/3, tan α = 2/√5 = <span class="fr"><span>2√5</span><span>5</span></span> (setelah dirasionalkan).</div></details></div>
+    <div class="ex"><p class="q">3. Hitung nilai 2 sin 30° + cos² 45° − tan 60° · cot 60°.</p>
+      <details class="sol"><summary>Lihat pembahasan</summary><div>2 · ½ + (½√2)² − √3 · ⅓√3 = 1 + ½ − 1 = ½.</div></details></div>
+  </div>
+  <div><h3>Cek cepat</h3><div class="qlist" id="cq-m4"></div></div>
+  <div class="pager"><a href="#m3">← Materi 03</a><a href="#m5">Materi 05: Pemecahan Masalah →</a></div>
+</section>
+
+<!-- ================= M5 ================= -->
+<section class="page" id="m5" hidden>
+  <div><div class="kicker">Materi 05 · TP 5</div><h2>Menyelesaikan masalah dengan rasio trigonometri</h2></div>
+  <div class="prose">
+    <p>Banyak masalah sehari-hari bisa dimodelkan sebagai segitiga siku-siku: mengukur tinggi pohon atau gedung, jarak kapal dari mercusuar, panjang tangga, atau tinggi layang-layang. Dua istilah yang sering muncul:</p>
+  </div>
+  <div class="two">
+    <div class="panel"><h3>Sudut elevasi</h3><p style="margin:0">Sudut antara <strong>garis horizontal</strong> dan <strong>garis pandang ke atas</strong> menuju objek. Contoh: melihat puncak tiang bendera dari halaman.</p></div>
+    <div class="panel"><h3>Sudut depresi</h3><p style="margin:0">Sudut antara <strong>garis horizontal</strong> dan <strong>garis pandang ke bawah</strong> menuju objek. Contoh: melihat kapal dari puncak mercusuar. Besarnya sama dengan sudut elevasi dari objek ke pengamat (sudut dalam berseberangan).</p></div>
+  </div>
+  <div class="panel">
+    <h3>Strategi pemecahan masalah</h3>
+    <ol style="margin:0;padding-left:1.2em">
+      <li><strong>Sketsa</strong> situasinya, tandai sudut siku-siku dan sudut yang diketahui.</li>
+      <li><strong>Kenali</strong> sisi mana yang diketahui dan sisi mana yang dicari terhadap sudut itu.</li>
+      <li><strong>Pilih rasio</strong> yang menghubungkan keduanya: depan & samping → tan; depan & miring → sin; samping & miring → cos.</li>
+      <li><strong>Hitung</strong>, lalu tambahkan bagian lain jika perlu (misalnya tinggi mata pengamat).</li>
+      <li><strong>Periksa</strong> apakah jawaban masuk akal dan beri satuan.</li>
+    </ol>
+  </div>
+
+  <div class="sim">
+    <div class="sim-head"><b>Simulasi 5 · Juru Ukur Lapangan</b><span>pilih situasi</span></div>
+    <div style="padding:16px 16px 0"><div class="btnrow" id="s5mode"><button data-m="el" class="on">Elevasi: tinggi gedung</button><button data-m="dp">Depresi: kapal & mercusuar</button><button data-m="tg">Tangga bersandar</button></div></div>
+    <div class="sim-body">
+      <svg id="s5svg" viewBox="0 0 360 250" role="img" aria-label="Sketsa situasi pengukuran"></svg>
+      <div class="ctrl">
+        <label for="s5a"><span id="s5aL">Jarak ke gedung d</span><output id="s5aO"></output></label>
+        <input type="range" id="s5a" min="5" max="60" step="1" value="30">
+        <label for="s5b"><span id="s5bL">Sudut elevasi θ</span><output id="s5bO"></output></label>
+        <input type="range" id="s5b" min="10" max="75" step="1" value="40">
+        <label for="s5c" id="s5cWrap"><span id="s5cL">Tinggi mata pengamat</span><output id="s5cO"></output></label>
+        <input type="range" id="s5c" min="0" max="2" step="0.1" value="1.6">
+        <div class="steps" id="s5steps"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>Contoh soal</h3>
+    <div class="ex"><p class="q">1. Seorang siswa bertinggi mata 1,5 m berdiri 15 m dari tiang bendera. Ia melihat puncak tiang dengan sudut elevasi 45°. Berapa tinggi tiang?</p>
+      <details class="sol"><summary>Lihat pembahasan</summary><div>Bagian tiang di atas mata: x = 15 · tan 45° = 15 · 1 = 15 m.<br>Tinggi tiang = 15 + 1,5 = 16,5 m.</div></details></div>
+    <div class="ex"><p class="q">2. Dari puncak mercusuar setinggi 40 m, sebuah perahu terlihat dengan sudut depresi 30°. Berapa jarak perahu ke kaki mercusuar?</p>
+      <details class="sol"><summary>Lihat pembahasan</summary><div>Sudut elevasi dari perahu = 30°. tan 30° = 40 / x, sehingga x = 40 / (⅓√3) = 40√3 ≈ 69,28 m.</div></details></div>
+    <div class="ex"><p class="q">3. Sebuah tangga 6 m bersandar di dinding dan membentuk sudut 60° dengan lantai. Seberapa tinggi ujung tangga di dinding dan berapa jarak kaki tangga ke dinding?</p>
+      <details class="sol"><summary>Lihat pembahasan</summary><div>Tinggi = 6 · sin 60° = 6 · ½√3 = 3√3 ≈ 5,20 m.<br>Jarak kaki = 6 · cos 60° = 6 · ½ = 3 m.</div></details></div>
+    <div class="ex"><p class="q">4. Panjang benang layang-layang 80 m dan membentuk sudut 30° terhadap tanah. Jika benang dianggap lurus, berapa tinggi layang-layang dari tanah? Berapa csc 30° bila digunakan untuk mencari panjang benang dari tingginya?</p>
+      <details class="sol"><summary>Lihat pembahasan</summary><div>Tinggi = 80 · sin 30° = 40 m. Sebaliknya, panjang benang = tinggi · csc 30° = 40 · 2 = 80 m.</div></details></div>
+  </div>
+  <div><h3>Cek cepat</h3><div class="qlist" id="cq-m5"></div></div>
+  <div class="pager"><a href="#m4">← Materi 04</a><a href="#latihan">Latihan Soal →</a></div>
+</section>
+
+<!-- ================= LATIHAN ================= -->
+<section class="page" id="latihan" hidden>
+  <div><div class="kicker">Evaluasi · TP 1–5</div><h2>Latihan soal</h2></div>
+  <div class="prose"><p>Kerjakan 15 soal berikut. Setiap soal hanya bisa diperiksa satu kali, lalu pembahasannya muncul. Untuk soal isian, tulis angka saja; pecahan seperti <span class="mono">3/4</span> dan desimal dengan koma atau titik sama-sama diterima.</p></div>
+  <div class="scorebar">
+    <div class="inrow"><label for="lName" style="font-weight:600">Nama</label><input type="text" id="lName" placeholder="Nama siswa" style="width:170px"></div>
+    <div class="bar" aria-hidden="true"><i id="lBar"></i></div>
+    <span class="mono"><b id="lDone">0</b>/15 dijawab · Skor <b id="lScore">0</b></span>
+  </div>
+  <div class="qlist" id="lList"></div>
+  <div class="panel" id="lResult" hidden>
+    <div class="kicker">Hasil akhir</div>
+    <div style="display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin-top:6px">
+      <div class="big" id="lBig">0</div>
+      <div><b id="lPred" style="font-size:1.15rem"></b><p id="lMsg" style="margin:.2em 0 0"></p></div>
+    </div>
+    <div class="btnrow" style="margin-top:12px"><button id="lReset" class="primary">Ulangi latihan</button></div>
+  </div>
+  <div class="pager"><a href="#menu">← Menu</a><a href="#refleksi">Refleksi Pembelajaran →</a></div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>Dikembangkan oleh <b>Noadi Girsang, S.Pd.Gr</b> · SMAN 2 Tangerang</div>
+    <div class="inrow" style="gap:6px"><span class="mono" id="mail">noadigirsang21@guru.sma.belajar.id</span><button class="copy" id="copyMail">Salin</button></div>
+    <div>Koleksi BADUI · Bahan Ajar Digital Unggul dan Inovatif</div>
+  </div>
+</footer>
+<canvas id="fx" aria-hidden="true"></canvas>
+
+<script>
+(function(){
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const D=Math.PI/180;
+const gcd=(a,b)=>{a=Math.abs(a);b=Math.abs(b);while(b){[a,b]=[b,a%b]}return a||1};
+const fr=(n,d)=>`<span class="fr"><span>${n}</span><span>${d}</span></span>`;
+const fmt=(x,k=2)=>{const r=Number(x.toFixed(k));return r.toLocaleString('id-ID',{maximumFractionDigits:k})};
+
+/* ---------- Audio (Web Audio, tanpa file) ---------- */
+const AU={ctx:null,on:true,master:null,mus:null,timer:null,next:0,step:0};
+try{AU.on=localStorage.getItem('trig-sound')!=='0'}catch(e){}
+function ac(){
+  if(!AU.ctx){const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;
+    AU.ctx=new C();AU.master=AU.ctx.createGain();AU.master.gain.value=.8;AU.master.connect(AU.ctx.destination);
+    AU.mus=AU.ctx.createGain();AU.mus.gain.value=0;AU.mus.connect(AU.master)}
+  if(AU.ctx.state==='suspended')AU.ctx.resume();
+  return AU.ctx;
+}
+function tone(f,t,d,type,g,dest){const c=AU.ctx,o=c.createOscillator(),v=c.createGain();o.type=type||'sine';o.frequency.setValueAtTime(f,t);
+  v.gain.setValueAtTime(.0001,t);v.gain.exponentialRampToValueAtTime(g,t+.012);v.gain.exponentialRampToValueAtTime(.0001,t+d);
+  o.connect(v);v.connect(dest||AU.master);o.start(t);o.stop(t+d+.05);return o}
+const SFX={
+  tap(){const t=AU.ctx.currentTime;tone(880,t,.08,'sine',.12);tone(1320,t+.03,.06,'sine',.05)},
+  nav(){const t=AU.ctx.currentTime;const o=tone(380,t,.25,'triangle',.12);o.frequency.exponentialRampToValueAtTime(980,t+.2)},
+  tick(v){const t=AU.ctx.currentTime;tone(320+v*900,t,.045,'square',.025)},
+  ok(){const t=AU.ctx.currentTime;[523.25,659.25,783.99,1046.5].forEach((f,i)=>tone(f,t+i*.08,.35,'triangle',.15))},
+  no(){const t=AU.ctx.currentTime;const o=tone(240,t,.34,'sawtooth',.06);o.frequency.exponentialRampToValueAtTime(130,t+.3);tone(180,t+.02,.3,'sine',.09)},
+  win(){const t=AU.ctx.currentTime;[[523.25,0],[659.25,.13],[783.99,.26],[1046.5,.39],[783.99,.6],[1046.5,.73]].forEach(([f,d])=>tone(f,t+d,.5,'triangle',.15));tone(261.63,t+.39,1.4,'sine',.12)}
+};
+function sfx(n,v){if(!AU.on||!ac())return;try{SFX[n](v)}catch(e){}}
+const mtof=m=>440*Math.pow(2,(m-69)/12);
+const CH=[[57,60,64],[53,57,60],[48,52,55],[55,59,62]];
+function musTick(){const c=AU.ctx;while(AU.next<c.currentTime+.6){
+  const ch=CH[Math.floor(AU.step/8)%4],k=AU.step%8,pat=[0,1,2,3,2,1,2,1];
+  const m=pat[k]===3?ch[0]+12:ch[pat[k]];
+  tone(mtof(m+12),AU.next,.45,'triangle',.045,AU.mus);
+  if(k===0){tone(mtof(ch[0]-12),AU.next,2.1,'sine',.09,AU.mus);tone(mtof(ch[2]),AU.next,2.1,'sine',.025,AU.mus)}
+  AU.next+=.25;AU.step++}}
+function musOn(){if(AU.timer||!AU.on||!ac())return;const c=AU.ctx;AU.next=c.currentTime+.08;
+  AU.mus.gain.cancelScheduledValues(c.currentTime);AU.mus.gain.setTargetAtTime(1,c.currentTime,.5);musTick();AU.timer=setInterval(musTick,150)}
+function musOff(){if(!AU.timer)return;clearInterval(AU.timer);AU.timer=null;AU.mus.gain.cancelScheduledValues(AU.ctx.currentTime);AU.mus.gain.setTargetAtTime(0,AU.ctx.currentTime,.25)}
+let cur=null;
+function syncMusic(){if(AU.on&&AU.ctx&&!document.hidden&&(cur==='judul'||cur==='menu'))musOn();else musOff()}
+const SPK_ON=`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`;
+const SPK_OFF=`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path d="M16.5 9.5l5 5M21.5 9.5l-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`;
+function paintSnd(){['#sndBtn','#sndBtn2'].forEach(id=>{const b=$(id);b.setAttribute('aria-pressed',AU.on);b.innerHTML=(AU.on?SPK_ON:SPK_OFF)+`<span>${AU.on?'Suara aktif':'Suara mati'}</span>`;b.setAttribute('aria-label',AU.on?'Matikan suara':'Nyalakan suara')})}
+['#sndBtn','#sndBtn2'].forEach(id=>$(id).addEventListener('click',()=>{AU.on=!AU.on;try{localStorage.setItem('trig-sound',AU.on?'1':'0')}catch(e){}
+  if(AU.on){ac();sfx('tap')}syncMusic();paintSnd()}));
+paintSnd();
+['pointerdown','keydown'].forEach(ev=>document.addEventListener(ev,()=>{if(AU.on){ac();syncMusic()}}));
+document.addEventListener('visibilitychange',syncMusic);
+document.addEventListener('click',e=>{const el=e.target.closest('button,summary');if(!el||el.disabled)return;
+  if(el.matches('.chk,#drOpts button,.snd'))return;sfx('tap')});
+document.addEventListener('change',e=>{if(e.target.tagName==='SELECT')sfx('tap')});
+let lastTick=0;
+document.addEventListener('input',e=>{const r=e.target;if(r.type!=='range')return;const n=performance.now();if(n-lastTick<45)return;lastTick=n;
+  sfx('tick',(r.value-r.min)/((r.max-r.min)||1))});
+
+/* ---------- Konfeti ---------- */
+const fx=$('#fx'),fxc=fx.getContext('2d');let parts=[],fxOn=false;
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function fxSize(){const d=devicePixelRatio||1;fx.width=innerWidth*d;fx.height=innerHeight*d;fxc.setTransform(d,0,0,d,0,0)}
+fxSize();addEventListener('resize',fxSize);
+function burst(x,y,n,pow){if(RM)return;const cs=getComputedStyle(document.documentElement),cols=['--c1','--c2','--c3','--c4','--c5'].map(v=>cs.getPropertyValue(v).trim());
+  for(let i=0;i<n;i++){const a=Math.random()*Math.PI*2,sp=(2+Math.random()*4)*(pow||1);
+    parts.push({x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-3*(pow||1),r:Math.random()*6,vr:(Math.random()-.5)*.3,w:5+Math.random()*5,h:3+Math.random()*4,c:cols[i%5],life:1})}
+  if(!fxOn){fxOn=true;requestAnimationFrame(fxLoop)}}
+function fxLoop(){fxc.clearRect(0,0,innerWidth,innerHeight);
+  parts=parts.filter(p=>p.life>0);
+  parts.forEach(p=>{p.vy+=.18;p.vx*=.99;p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;p.life-=.012;
+    fxc.save();fxc.globalAlpha=Math.max(p.life,0);fxc.translate(p.x,p.y);fxc.rotate(p.r);fxc.fillStyle=p.c;fxc.fillRect(-p.w/2,-p.h/2,p.w,p.h);fxc.restore()});
+  if(parts.length)requestAnimationFrame(fxLoop);else{fxOn=false;fxc.clearRect(0,0,innerWidth,innerHeight)}}
+
+/* ---------- Animasi sampul ---------- */
+function drawCover(th){
+  const cx=120,cy=150,r=96,x=cx+r*Math.cos(th*D),y=cy-r*Math.sin(th*D);
+  let g=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" style="stroke:var(--bg);opacity:.28" stroke-width="2"/>`;
+  g+=`<line x1="12" y1="${cy}" x2="240" y2="${cy}" style="stroke:var(--bg);opacity:.25"/><line x1="${cx}" y1="44" x2="${cx}" y2="256" style="stroke:var(--bg);opacity:.25"/>`;
+  g+=`<path d="M${cx} ${cy} L${cx+r} ${cy} A${r} ${r} 0 0 0 ${x.toFixed(1)} ${y.toFixed(1)} Z" style="fill:var(--accent);opacity:.2"/>`;
+  g+=`<path d="${arc(cx,cy,30,0,th)}" fill="none" style="stroke:var(--accent)" stroke-width="3"/>`;
+  g+=`<line x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${cy}" style="stroke:var(--bg)" stroke-width="4" stroke-linecap="round"/>`;
+  g+=`<line x1="${x.toFixed(1)}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" style="stroke:var(--c2)" stroke-width="4" stroke-linecap="round"/>`;
+  g+=`<line x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" style="stroke:var(--accent)" stroke-width="4" stroke-linecap="round"/>`;
+  g+=`<polyline points="${(x-10).toFixed(1)},${cy} ${(x-10).toFixed(1)},${cy-10} ${x.toFixed(1)},${cy-10}" fill="none" style="stroke:var(--bg)" stroke-width="1.5"/>`;
+  g+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="7" style="fill:var(--accent)"/>`;
+  g+=`<text x="${cx+34}" y="${cy-8}" style="fill:var(--accent)" font-weight="700" font-size="14">θ</text>`;
+  g+=`<text x="10" y="18" style="fill:var(--bg)" font-weight="700" font-size="14">θ = ${Math.round(th)}°</text>`;
+  g+=`<text x="10" y="36" style="fill:var(--c2)" font-weight="700" font-size="13">sin θ = ${fmt(Math.sin(th*D),3)}</text>`;
+  g+=`<text x="10" y="54" style="fill:var(--bg)" font-weight="700" font-size="13">cos θ = ${fmt(Math.cos(th*D),3)}</text>`;
+  $('#coverArt').innerHTML=g;
+}
+let t0=performance.now();
+function coverLoop(now){if(cur==='judul'||cur===null)drawCover(48+28*Math.sin((now-t0)/1600));requestAnimationFrame(coverLoop)}
+if(RM)drawCover(50);else requestAnimationFrame(coverLoop);
+
+/* ---------- Router ---------- */
+const pages=['judul','menu','tujuan','materi','m1','m2','m3','m4','m5','latihan','refleksi'];
+function route(){
+  let h=location.hash.replace('#','');
+  if(!pages.includes(h)) h='judul';
+  const isM=/^m\d$/.test(h);
+  $('#appbar').hidden=(h==='judul');$('footer').hidden=(h==='judul');
+  $('#navlist').hidden=!isM;
+  $('#where').textContent={menu:'Menu Pembelajaran',tujuan:'Tujuan Pembelajaran',materi:'Materi Ajar',latihan:'Latihan Soal',refleksi:'Refleksi Pembelajaran'}[h]||'Materi Ajar';
+  $('#where').hidden=isM;
+  pages.forEach(p=>{document.getElementById(p).hidden=(p!==h)});
+  $$('#navlist a').forEach(a=>{if(a.getAttribute('href')==='#'+h){a.setAttribute('aria-current','page');const c=$('#navlist');requestAnimationFrame(()=>{c.scrollLeft=a.offsetLeft-c.offsetLeft-c.clientWidth/2+a.offsetWidth/2})}else a.removeAttribute('aria-current')});
+  window.scrollTo(0,0);
+  if(cur!==null&&cur!==h)sfx('nav');
+  cur=h;syncMusic();
+}
+addEventListener('hashchange',route);
+const HN={menu:'4',tujuan:'5',materi:'5',m1:'01',m2:'02',m3:'03',m4:'04',m5:'05',latihan:'15',refleksi:''};
+Object.entries(HN).forEach(([id,n])=>{const f=document.getElementById(id).firstElementChild;f.classList.add('phead');f.dataset.n=n});
+
+/* ---------- Bentuk π ---------- */
+function degToPi(deg){
+  if(!Number.isInteger(deg)) return fmt(deg*D,4);
+  if(deg===0) return '0';
+  const g=gcd(deg,180), n=deg/g, d=180/g;
+  const ns=(n===1?'':n)+'π';
+  return d===1?ns:fr(ns,d);
+}
+function arc(cx,cy,r,a1,a2){
+  const x1=cx+r*Math.cos(a1*D),y1=cy-r*Math.sin(a1*D),x2=cx+r*Math.cos(a2*D),y2=cy-r*Math.sin(a2*D);
+  return `M${x1.toFixed(2)} ${y1.toFixed(2)} A${r} ${r} 0 ${(a2-a1)>180?1:0} 0 ${x2.toFixed(2)} ${y2.toFixed(2)}`;
+}
+
+/* ---------- SIM 1 ---------- */
+const s1={deg:60,r:5};
+function drawS1(){
+  const c=160,R=110,t=s1.deg;
+  let g=`<circle cx="${c}" cy="${c}" r="${R}" class="s-none k-line" stroke-width="2"/>`;
+  g+=`<line x1="${c-R-12}" y1="${c}" x2="${c+R+12}" y2="${c}" class="k-line" stroke-width="1"/><line x1="${c}" y1="${c-R-12}" x2="${c}" y2="${c+R+12}" class="k-line" stroke-width="1"/>`;
+  if(t>=360) g+=`<circle cx="${c}" cy="${c}" r="${R}" class="s-tint" opacity=".85"/><circle cx="${c}" cy="${c}" r="${R}" class="s-none k-acc" stroke-width="5"/>`;
+  else if(t>0){
+    const x=c+R*Math.cos(t*D),y=c-R*Math.sin(t*D);
+    g+=`<path d="M${c} ${c} L${c+R} ${c} A${R} ${R} 0 ${t>180?1:0} 0 ${x.toFixed(2)} ${y.toFixed(2)} Z" class="s-tint" opacity=".85"/>`;
+    g+=`<path d="${arc(c,c,R,0,t)}" class="s-none k-acc" stroke-width="5" stroke-linecap="round"/>`;
+    g+=`<line x1="${c}" y1="${c}" x2="${x.toFixed(2)}" y2="${y.toFixed(2)}" class="k-ink" stroke-width="2.5"/>`;
+    if(t<=345) g+=`<path d="${arc(c,c,26,0,t)}" class="s-none k-acc2" stroke-width="2"/>`;
+  }
+  g+=`<line x1="${c}" y1="${c}" x2="${c+R}" y2="${c}" class="k-ink" stroke-width="2.5"/>`;
+  for(let k=1;k<=6;k++){
+    const a=k/D, px=c+R*Math.cos(a*D), py=c-R*Math.sin(a*D), lx=c+(R+18)*Math.cos(a*D), ly=c-(R+18)*Math.sin(a*D);
+    g+=`<circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="4" class="s-acc2"/><text x="${lx.toFixed(1)}" y="${(ly+4).toFixed(1)}" text-anchor="middle" class="s-acc2" font-weight="700">${k}r</text>`;
+  }
+  g+=`<circle cx="${c}" cy="${c}" r="3.5" class="s-ink"/><text x="${c+R/2}" y="${c+18}" text-anchor="middle" class="s-muted">r</text>`;
+  $('#s1svg').innerHTML=g;
+  const rad=t*D;
+  $('#s1degO').textContent=fmt(t,2)+'°';
+  $('#s1rO').textContent=s1.r+' cm';
+  const piStr=Number.isInteger(t)?degToPi(t)+' rad':'≈ '+fmt(rad,4)+' rad';
+  $('#s1read').innerHTML=`<dt>Derajat</dt><dd>${fmt(t,2)}°</dd><dt>Bentuk π</dt><dd>${piStr}</dd><dt>Radian desimal</dt><dd>${fmt(rad,4)} rad</dd><dt>Busur s = r·θ</dt><dd>${s1.r} × ${fmt(rad,4)} = ${fmt(s1.r*rad,2)} cm</dd><dt>Bagian putaran</dt><dd>${fmt(t/360*100,1)}%</dd>`;
+}
+$('#s1deg').addEventListener('input',e=>{s1.deg=+e.target.value;drawS1()});
+$('#s1r').addEventListener('input',e=>{s1.r=+e.target.value;drawS1()});
+$('#s1one').addEventListener('click',()=>{s1.deg=180/Math.PI;$('#s1deg').value=57;drawS1()});
+$$('#sim1 [data-d]').forEach(b=>b.addEventListener('click',()=>{s1.deg=+b.dataset.d;$('#s1deg').value=s1.deg;drawS1()}));
+drawS1();
+
+/* ---------- SIM 2 ---------- */
+function c2(){
+  const d=parseFloat($('#c2deg').value);
+  if(isNaN(d)) $('#c2degOut').textContent='Masukkan angka.';
+  else{
+    let s=`${fmt(d,4)}° × ${fr('π','180°')}`;
+    if(Number.isInteger(d)){ s+=` = ${fr(d+'π','180')} = <b>${degToPi(d)} rad</b>`; }
+    s+=`<br>≈ <b>${fmt(d*D,4)} rad</b>`;
+    $('#c2degOut').innerHTML=s;
+  }
+  const p=parseInt($('#c2p').value),q=parseInt($('#c2q').value);
+  if(isNaN(p)||isNaN(q)||q===0) $('#c2radOut').textContent='Penyebut tidak boleh 0.';
+  else{
+    const val=p*180/q;
+    let s=`${fr((p===1?'':p)+'π',q)} rad × ${fr('180°','π')} = ${fr(p+' × 180°',q)} = ${fr((p*180)+'°',q)}`;
+    s+=`<br>= <b>${fmt(val,4)}°</b>`;
+    if(!Number.isInteger(val)){const dd=Math.floor(Math.abs(val)),m=(Math.abs(val)-dd)*60,mm=Math.floor(m+1e-9),ss=(m-mm)*60;s+=` = ${val<0?'−':''}${dd}°${mm}′${fmt(ss,1)}″`}
+    $('#c2radOut').innerHTML=s;
+  }
+  const r=parseFloat($('#c2r').value);
+  if(isNaN(r)) $('#c2rOut').textContent='Masukkan angka.';
+  else $('#c2rOut').innerHTML=`${fmt(r,4)} × ${fr('180°','π')} = ${fr(fmt(r*180,4)+'°','3,14159…')} ≈ <b>${fmt(r/D,2)}°</b>`;
+}
+['#c2deg','#c2p','#c2q','#c2r'].forEach(id=>$(id).addEventListener('input',c2));c2();
+
+/* Latih kilat */
+const dr={streak:0,total:0,ans:null,lock:false};
+const pool=[];for(let a=15;a<=360;a+=15)pool.push(a);
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function drNew(){
+  dr.lock=false;$('#drFb').textContent='';
+  const a=pool[Math.floor(Math.random()*pool.length)];
+  const toRad=Math.random()<.5;
+  const others=shuffle(pool.filter(x=>x!==a)).slice(0,3);
+  const opts=shuffle([a,...others]);
+  dr.ans=a;
+  $('#drQ').innerHTML=toRad?`${a}° = … rad`:`${degToPi(a)} rad = … °`;
+  $('#drOpts').innerHTML=opts.map(o=>`<button data-v="${o}">${toRad?degToPi(o):o+'°'}</button>`).join('');
+  $$('#drOpts button').forEach(b=>b.addEventListener('click',()=>{
+    if(dr.lock)return;dr.lock=true;
+    const ok=+b.dataset.v===dr.ans;
+    b.style.borderColor=ok?'var(--good)':'var(--bad)';b.style.background=ok?'var(--goodbg)':'var(--badbg)';
+    sfx(ok?'ok':'no');if(ok){const r=b.getBoundingClientRect();burst(r.left+r.width/2,r.top,18,.7)}
+    if(ok){dr.streak++;dr.total++;$('#drFb').innerHTML='<b style="color:var(--good)">Tepat!</b> Lanjutkan.'}
+    else{dr.streak=0;$('#drFb').innerHTML=`<b style="color:var(--bad)">Belum tepat.</b> ${dr.ans}° = ${degToPi(dr.ans)} rad, karena ${dr.ans} × π/180 disederhanakan.`;
+      $$('#drOpts button').forEach(x=>{if(+x.dataset.v===dr.ans){x.style.borderColor='var(--good)';x.style.background='var(--goodbg)'}})}
+    $('#drStreak').textContent=dr.streak;$('#drTotal').textContent=dr.total;
+  }));
+}
+$('#drNext').addEventListener('click',drNew);drNew();
+
+/* ---------- SIM 3 ---------- */
+const s3={a:35,h:8,ref:'A',k:'sin'};
+const RAT={sin:['de','mi'],cos:['sa','mi'],tan:['de','sa'],csc:['mi','de'],sec:['mi','sa'],cot:['sa','de']};
+const NM={de:'depan',sa:'samping',mi:'miring'};
+function drawS3(){
+  const sc=26, Ax=30, Ay=290, a=s3.a;
+  const ac=s3.h*Math.cos(a*D), bc=s3.h*Math.sin(a*D);
+  const Cx=Ax+ac*sc, Cy=Ay, Bx=Cx, By=Ay-bc*sc;
+  const sides={AC:ac,BC:bc,AB:s3.h};
+  const map=s3.ref==='A'?{de:'BC',sa:'AC',mi:'AB'}:{de:'AC',sa:'BC',mi:'AB'};
+  const [n,d]=RAT[s3.k]; const hn=map[n], hd=map[d];
+  const cls=s=>'side'+(s===hn?' hn':s===hd?' hd':'');
+  let g='';
+  g+=`<polygon points="${Ax},${Ay} ${Cx},${Cy} ${Bx},${By}" class="s-tint2" opacity=".55"/>`;
+  g+=`<line x1="${Ax}" y1="${Ay}" x2="${Cx}" y2="${Cy}" class="${cls('AC')}"/>`;
+  g+=`<line x1="${Cx}" y1="${Cy}" x2="${Bx}" y2="${By}" class="${cls('BC')}"/>`;
+  g+=`<line x1="${Ax}" y1="${Ay}" x2="${Bx}" y2="${By}" class="${cls('AB')}"/>`;
+  g+=`<polyline points="${Cx-13},${Cy} ${Cx-13},${Cy-13} ${Cx},${Cy-13}" class="s-none k-ink" stroke-width="1.5"/>`;
+  const refA=s3.ref==='A';
+  g+=`<path d="${arc(Ax,Ay,34,0,a)}" class="s-none ${refA?'k-acc':'k-muted'}" stroke-width="${refA?3:1.5}"/>`;
+  g+=`<path d="${arc(Bx,By,28,180+a,270)}" class="s-none ${!refA?'k-acc':'k-muted'}" stroke-width="${!refA?3:1.5}"/>`;
+  g+=`<text x="${Ax+40}" y="${Ay-8}" class="${refA?'s-acc':'s-muted'}" font-weight="700">α=${a}°</text>`;
+  g+=`<text x="${Bx-30}" y="${By+46}" text-anchor="end" class="${!refA?'s-acc':'s-muted'}" font-weight="700">β=${90-a}°</text>`;
+  g+=`<text x="${Ax-4}" y="${Ay+20}" class="s-ink" font-weight="700" font-size="15">A</text><text x="${Cx+6}" y="${Cy+20}" class="s-ink" font-weight="700" font-size="15">C</text><text x="${Bx+8}" y="${By+4}" class="s-ink" font-weight="700" font-size="15">B</text>`;
+  const inv={};Object.entries(map).forEach(([k,v])=>inv[v]=NM[k]);
+  g+=`<text x="${(Ax+Cx)/2}" y="${Ay-10}" text-anchor="middle" class="s-ink">${inv.AC} ${fmt(ac)}</text>`;
+  g+=`<text x="${Cx-8}" y="${(Cy+By)/2}" text-anchor="end" class="s-ink">${inv.BC} ${fmt(bc)}</text>`;
+  const mx=(Ax+Bx)/2,my=(Ay+By)/2;
+  g+=`<text x="${mx-10}" y="${my-10}" text-anchor="end" class="s-ink">${inv.AB} ${fmt(s3.h)}</text>`;
+  $('#s3svg').innerHTML=g;
+  $('#s3aO').textContent=a+'°';$('#s3hO').textContent=fmt(s3.h,1);
+  const ang=refA?'α':'β', angv=refA?a:90-a;
+  const nv=sides[hn], dv=sides[hd];
+  $('#s3out').innerHTML=`${s3.k} ${ang} = ${fr(NM[n],NM[d])} = ${fr(hn,hd)} = ${fr(fmt(nv),fmt(dv))} = <b>${fmt(nv/dv,4)}</b>`;
+  const dsa=sides[map.de],ssa=sides[map.sa],msa=sides.AB;
+  const v={sin:dsa/msa,cos:ssa/msa,tan:dsa/ssa,csc:msa/dsa,sec:msa/ssa,cot:ssa/dsa};
+  $('#s3all').innerHTML=Object.keys(v).map(k=>`<dt>${k} ${angv}°</dt><dd${k===s3.k?' style="color:var(--accent)"':''}>${fmt(v[k],4)}</dd>`).join('');
+}
+$('#s3a').addEventListener('input',e=>{s3.a=+e.target.value;drawS3()});
+$('#s3h').addEventListener('input',e=>{s3.h=+e.target.value;drawS3()});
+$$('#s3ref button').forEach(b=>b.addEventListener('click',()=>{s3.ref=b.dataset.r;$$('#s3ref button').forEach(x=>x.classList.toggle('on',x===b));drawS3()}));
+$$('#s3rat button').forEach(b=>b.addEventListener('click',()=>{s3.k=b.dataset.k;$$('#s3rat button').forEach(x=>x.classList.toggle('on',x===b));drawS3()}));
+drawS3();
+
+/* ---------- SIM 4 ---------- */
+function simp(n){let k=1,m=n;for(let i=Math.floor(Math.sqrt(n));i>1;i--){if(n%(i*i)===0){k=i;m=n/(i*i);break}}return [k,m]}
+const rs=(k,m)=>m===1?`${k}`:(k===1?`√${m}`:`${k}√${m}`);
+function ratio(p,q){
+  const [k3,m3]=simp(p[1]*q[1]);
+  let num=p[0]*k3, den=q[0]*q[1];
+  const g=gcd(num,den);num/=g;den/=g;
+  const ns=rs(num,m3);
+  return den===1?ns:fr(ns,den);
+}
+const lab={ds:['Depan','Samping'],dm:['Depan','Miring'],sm:['Samping','Miring']};
+function s4(){
+  const mode=$('#s4mode').value;
+  $('#s4l1').textContent=lab[mode][0];$('#s4l2').textContent=lab[mode][1];
+  const x=parseInt($('#s4x').value), y=parseInt($('#s4y').value);
+  const tab=$('#s4tab'), st=$('#s4steps');
+  if(!(x>0&&y>0)){st.textContent='Masukkan dua bilangan bulat positif.';tab.innerHTML='';$('#s4svg').innerHTML='';return}
+  let de,sa,mi,step;
+  if(mode==='ds'){de=[x,1];sa=[y,1];mi=simp(x*x+y*y);step=`miring = √(${x}² + ${y}²) = √${x*x+y*y} = <b>${rs(...mi)}</b>`}
+  else{
+    if(y<=x){st.innerHTML=`<span style="color:var(--bad)">Sisi miring harus lebih panjang dari sisi ${mode==='dm'?'depan':'samping'}.</span>`;tab.innerHTML='';$('#s4svg').innerHTML='';return}
+    const o=simp(y*y-x*x);mi=[y,1];
+    if(mode==='dm'){de=[x,1];sa=o;step=`samping = √(${y}² − ${x}²) = √${y*y-x*x} = <b>${rs(...o)}</b>`}
+    else{sa=[x,1];de=o;step=`depan = √(${y}² − ${x}²) = √${y*y-x*x} = <b>${rs(...o)}</b>`}
+  }
+  st.innerHTML=`Pythagoras:<br>${step}<br>depan = ${rs(...de)}, samping = ${rs(...sa)}, miring = ${rs(...mi)}`;
+  const val=a=>a[0]*Math.sqrt(a[1]);
+  const R=[['sin','depan','miring',de,mi],['cos','samping','miring',sa,mi],['tan','depan','samping',de,sa],['csc','miring','depan',mi,de],['sec','miring','samping',mi,sa],['cot','samping','depan',sa,de]];
+  tab.innerHTML=`<tr><th>Rasio</th><th>Definisi</th><th>Substitusi</th><th>Bentuk sederhana</th><th>Desimal</th></tr>`+
+    R.map(r=>`<tr><td>${r[0]} α</td><td>${fr(r[1],r[2])}</td><td>${fr(rs(...r[3]),rs(...r[4]))}</td><td>${ratio(r[3],r[4])}</td><td>${fmt(val(r[3])/val(r[4]),4)}</td></tr>`).join('');
+  const dv=val(de),sv=val(sa);
+  const sc=Math.min(260/sv,200/dv), Ax=40,Ay=230,Cx=Ax+sv*sc,By=Ay-dv*sc;
+  const al=Math.atan2(dv,sv)/D;
+  $('#s4svg').innerHTML=`<polygon points="${Ax},${Ay} ${Cx},${Ay} ${Cx},${By}" class="s-tint2" opacity=".55"/>
+   <line x1="${Ax}" y1="${Ay}" x2="${Cx}" y2="${Ay}" class="side hd"/><line x1="${Cx}" y1="${Ay}" x2="${Cx}" y2="${By}" class="side hn"/><line x1="${Ax}" y1="${Ay}" x2="${Cx}" y2="${By}" class="side"/>
+   <polyline points="${Cx-12},${Ay} ${Cx-12},${Ay-12} ${Cx},${Ay-12}" class="s-none k-ink" stroke-width="1.5"/>
+   <path d="${arc(Ax,Ay,30,0,al)}" class="s-none k-acc" stroke-width="3"/>
+   <text x="${Ax+36}" y="${Ay-6}" class="s-acc" font-weight="700">α≈${fmt(al,1)}°</text>
+   <text x="${(Ax+Cx)/2}" y="${Ay+18}" text-anchor="middle" class="s-acc2" font-weight="700">samping ${rs(...sa)}</text>
+   <text x="${Cx+6}" y="${(Ay+By)/2}" class="s-acc" font-weight="700">depan</text><text x="${Cx+6}" y="${(Ay+By)/2+16}" class="s-acc" font-weight="700">${rs(...de)}</text>
+   <text x="${(Ax+Cx)/2-8}" y="${(Ay+By)/2-8}" text-anchor="end" class="s-ink" font-weight="700">miring ${rs(...mi)}</text>`;
+}
+$('#s4mode').addEventListener('change',()=>{const m=$('#s4mode').value;if(m!=='ds'&&+$('#s4y').value<=+$('#s4x').value){$('#s4y').value=+$('#s4x').value+3}s4()});
+['#s4x','#s4y'].forEach(id=>$(id).addEventListener('input',s4));
+$('#s4rand').addEventListener('click',()=>{const x=1+Math.floor(Math.random()*9);let y=1+Math.floor(Math.random()*12);if($('#s4mode').value!=='ds')y=x+1+Math.floor(Math.random()*8);$('#s4x').value=x;$('#s4y').value=y;s4()});
+$$('[data-p]').forEach(b=>b.addEventListener('click',()=>{const[p,q]=b.dataset.p.split(',');$('#s4mode').value='ds';$('#s4x').value=p;$('#s4y').value=q;s4()}));
+s4();
+
+/* ---------- SIM 5 ---------- */
+const M5={
+  el:{a:['Jarak ke gedung d',5,60,1,30,' m'],b:['Sudut elevasi θ',10,75,1,40,'°'],c:['Tinggi mata pengamat',0,2,0.1,1.6,' m']},
+  dp:{a:['Tinggi mercusuar H',20,100,1,50,' m'],b:['Sudut depresi θ',10,70,1,25,'°'],c:null},
+  tg:{a:['Panjang tangga L',3,12,0.5,6,' m'],b:['Sudut tangga–lantai θ',30,80,1,60,'°'],c:null}
+};
+let m5='el';
+function setMode(m){
+  m5=m;const cf=M5[m];
+  [['a',cf.a],['b',cf.b],['c',cf.c]].forEach(([k,v])=>{
+    const inp=$('#s5'+k), lab=$(k==='c'?'#s5cWrap':'label[for="s5'+k+'"]');
+    if(!v){inp.hidden=true;lab.hidden=true;return}
+    inp.hidden=false;lab.hidden=false;
+    $('#s5'+k+'L').textContent=v[0];inp.min=v[1];inp.max=v[2];inp.step=v[3];inp.value=v[4];
+  });
+  $$('#s5mode button').forEach(x=>x.classList.toggle('on',x.dataset.m===m));
+  drawS5();
+}
+function drawS5(){
+  const cf=M5[m5], a=+$('#s5a').value, t=+$('#s5b').value, c=+$('#s5c').value;
+  $('#s5aO').textContent=fmt(a,1)+cf.a[5];$('#s5bO').textContent=t+'°';if(cf.c)$('#s5cO').textContent=fmt(c,1)+cf.c[5];
+  const gy=215; let g=`<rect x="0" y="${gy}" width="360" height="35" class="s-tint2"/><line x1="0" y1="${gy}" x2="360" y2="${gy}" class="k-ink" stroke-width="2"/>`;
+  let steps='';
+  if(m5==='el'){
+    const x=a*Math.tan(t*D), H=x+c;
+    const k=Math.min(240/a,175/H), ox=50, ey=gy-c*k, bx=ox+a*k, ty=gy-H*k;
+    g+=`<rect x="${bx}" y="${ty}" width="34" height="${gy-ty}" class="s-surf k-ink" stroke-width="2"/>`;
+    for(let yy=ty+12;yy<gy-8;yy+=16) g+=`<line x1="${bx+8}" y1="${yy}" x2="${bx+26}" y2="${yy}" class="k-line" stroke-width="4"/>`;
+    g+=`<line x1="${ox}" y1="${gy}" x2="${ox}" y2="${ey}" class="k-ink" stroke-width="3"/><circle cx="${ox}" cy="${ey-5}" r="5" class="s-ink"/>`;
+    g+=`<line x1="${ox}" y1="${ey}" x2="${bx}" y2="${ey}" class="k-muted" stroke-width="1.5" stroke-dasharray="5 4"/>`;
+    g+=`<line x1="${ox}" y1="${ey}" x2="${bx}" y2="${ty}" class="k-acc" stroke-width="2.5"/>`;
+    g+=`<path d="${arc(ox,ey,32,0,t)}" class="s-none k-acc" stroke-width="2.5"/><text x="${ox+38}" y="${ey-6}" class="s-acc" font-weight="700">${t}°</text>`;
+    g+=`<line x1="${bx-6}" y1="${ey}" x2="${bx-6}" y2="${ty}" class="k-acc2" stroke-width="3"/><text x="${bx-10}" y="${(ey+ty)/2}" text-anchor="end" class="s-acc2" font-weight="700">x</text>`;
+    g+=`<text x="${(ox+bx)/2}" y="${gy+20}" text-anchor="middle" class="s-ink">d = ${fmt(a,1)} m</text>`;
+    g+=`<text x="${bx+40}" y="${ty+14}" class="s-ink" font-weight="700">H?</text>`;
+    steps=`tan θ = ${fr('x','d')} → x = d · tan θ<br>x = ${fmt(a,1)} · tan ${t}° = ${fmt(a,1)} · ${fmt(Math.tan(t*D),4)} = ${fmt(x,2)} m<br>H = x + tinggi mata = ${fmt(x,2)} + ${fmt(c,1)} = <b>${fmt(H,2)} m</b>`;
+  } else if(m5==='dp'){
+    const H=a, d=H/Math.tan(t*D);
+    const k=Math.min(240/d,170/H), lx=60, ty=gy-H*k, sx=lx+d*k;
+    g+=`<polygon points="${lx-14},${gy} ${lx+14},${gy} ${lx+8},${ty} ${lx-8},${ty}" class="s-surf k-ink" stroke-width="2"/>`;
+    g+=`<rect x="${lx-10}" y="${ty-12}" width="20" height="12" class="s-acc"/>`;
+    g+=`<line x1="${lx}" y1="${ty}" x2="352" y2="${ty}" class="k-muted" stroke-width="1.5" stroke-dasharray="5 4"/><text x="350" y="${ty-6}" text-anchor="end" class="s-muted" font-size="11">horizontal</text>`;
+    g+=`<line x1="${lx}" y1="${ty}" x2="${sx}" y2="${gy-4}" class="k-acc" stroke-width="2.5"/>`;
+    g+=`<path d="${arc(lx,ty,40,-t,0)}" class="s-none k-acc" stroke-width="2.5"/><text x="${lx+46}" y="${ty+16}" class="s-acc" font-weight="700">${t}°</text>`;
+    g+=`<path d="M${sx-14} ${gy-4} L${sx+14} ${gy-4} L${sx+8} ${gy+4} L${sx-8} ${gy+4} Z" class="s-ink"/><line x1="${sx}" y1="${gy-4}" x2="${sx}" y2="${gy-18}" class="k-ink" stroke-width="2"/>`;
+    g+=`<path d="${arc(sx,gy-4,26,180-t,180)}" class="s-none k-acc2" stroke-width="2"/>`;
+    g+=`<text x="${lx-18}" y="${(gy+ty)/2}" text-anchor="end" class="s-ink">H</text><text x="${(lx+sx)/2}" y="${gy+20}" text-anchor="middle" class="s-acc2" font-weight="700">jarak x?</text>`;
+    steps=`Sudut elevasi dari kapal = sudut depresi = ${t}°<br>tan ${t}° = ${fr('H','x')} → x = ${fr('H','tan θ')}<br>x = ${fr(fmt(H,1),fmt(Math.tan(t*D),4))} = <b>${fmt(d,2)} m</b><br>Panjang garis pandang = H · csc θ = ${fmt(H/Math.sin(t*D),2)} m`;
+  } else {
+    const L=a, h=L*Math.sin(t*D), b=L*Math.cos(t*D);
+    const k=Math.min(230/b,180/h,40), wx=300, bx=wx-b*k, ty=gy-h*k;
+    g+=`<rect x="${wx}" y="20" width="30" height="${gy-20}" class="s-surf k-ink" stroke-width="2"/>`;
+    g+=`<line x1="${bx}" y1="${gy}" x2="${wx}" y2="${ty}" class="k-acc" stroke-width="7" stroke-linecap="round"/>`;
+    const n=Math.max(3,Math.round(L));for(let i=1;i<n;i++){const px=bx+(wx-bx)*i/n,py=gy+(ty-gy)*i/n;g+=`<circle cx="${px}" cy="${py}" r="2.5" class="s-ink"/>`}
+    g+=`<path d="${arc(bx,gy,30,0,t)}" class="s-none k-ink" stroke-width="2"/><text x="${bx+34}" y="${gy-8}" class="s-ink" font-weight="700">${t}°</text>`;
+    g+=`<line x1="${wx-4}" y1="${gy}" x2="${wx-4}" y2="${ty}" class="k-acc2" stroke-width="3"/><text x="${wx-8}" y="${(gy+ty)/2}" text-anchor="end" class="s-acc2" font-weight="700">h?</text>`;
+    g+=`<text x="${(bx+wx)/2}" y="${gy+20}" text-anchor="middle" class="s-ink">jarak kaki b?</text><text x="${(bx+wx)/2-14}" y="${(gy+ty)/2-8}" text-anchor="end" class="s-acc" font-weight="700">L</text>`;
+    steps=`sin θ = ${fr('h','L')} → h = L · sin θ = ${fmt(L,1)} · ${fmt(Math.sin(t*D),4)} = <b>${fmt(h,2)} m</b><br>cos θ = ${fr('b','L')} → b = L · cos θ = ${fmt(L,1)} · ${fmt(Math.cos(t*D),4)} = <b>${fmt(b,2)} m</b><br>Cek: cot θ = ${fr('b','h')} = ${fmt(b/h,4)}`;
+  }
+  $('#s5svg').innerHTML=g;$('#s5steps').innerHTML=steps;
+}
+['#s5a','#s5b','#s5c'].forEach(id=>$(id).addEventListener('input',drawS5));
+$$('#s5mode button').forEach(b=>b.addEventListener('click',()=>setMode(b.dataset.m)));
+setMode('el');
+
+/* ---------- Gambar contoh soal ---------- */
+const P=(x,y)=>x.toFixed(1)+' '+y.toFixed(1);
+const T=(x,y,s,c='s-ink',a='middle',w='700')=>`<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" text-anchor="${a}" class="${c}" font-weight="${w}">${s}</text>`;
+function sectorFig(deg,cap,o={}){
+  const cx=130,cy=98,r=62;let g=`<line x1="40" y1="${cy}" x2="220" y2="${cy}" class="k-line"/><line x1="${cx}" y1="22" x2="${cx}" y2="174" class="k-line"/>`;
+  const ex=cx+r*Math.cos(deg*D),ey=cy-r*Math.sin(deg*D);
+  g+=`<path d="M${cx} ${cy} L${cx+r} ${cy} A${r} ${r} 0 ${deg>180?1:0} 0 ${P(ex,ey)} Z" class="s-tint"/>`;
+  g+=`<path d="${arc(cx,cy,r,0,deg)}" class="s-none k-acc" stroke-width="4" stroke-linecap="round"/>`;
+  g+=`<line x1="${cx}" y1="${cy}" x2="${cx+r}" y2="${cy}" class="k-ink" stroke-width="2.5"/><line x1="${cx}" y1="${cy}" x2="${P(ex,ey).replace(' ','" y2="')}" class="k-ink" stroke-width="2.5"/>`;
+  g+=`<path d="${arc(cx,cy,18,0,deg)}" class="s-none k-acc2" stroke-width="2"/><circle cx="${cx}" cy="${cy}" r="3" class="s-ink"/>`;
+  const m=deg/2*D, lr=deg<35?r+30:32;
+  g+=T(cx+lr*Math.cos(m),cy-lr*Math.sin(m)+4,o.th||'θ','s-acc2');
+  if(o.arc){const ar=r+16;g+=T(cx+ar*Math.cos(m),cy-ar*Math.sin(m)+4,o.arc,'s-acc')}
+  if(o.r) g+=T(cx+r/2,cy+16,o.r,'s-ink','middle','500');
+  g+=T(130,196,cap,'s-ink');
+  return `<svg viewBox="0 0 260 205">${g}</svg>`;
+}
+function clockFig(){
+  const cx=130,cy=95,r=72;let g=`<circle cx="${cx}" cy="${cy}" r="${r}" class="s-surf k-ink" stroke-width="2.5"/>`;
+  g+=`<path d="M${cx} ${cy} L${cx} ${cy-58} ${arc(cx,cy,58,90,-30).replace('M','L').replace(/A58 58 0 0 0/,'A58 58 0 0 1')} Z" class="s-tint"/>`;
+  for(let i=0;i<12;i++){const a=(90-i*30)*D;g+=`<line x1="${P(cx+(r-8)*Math.cos(a),cy-(r-8)*Math.sin(a)).replace(' ','" y1="')}" x2="${P(cx+r*Math.cos(a),cy-r*Math.sin(a)).replace(' ','" y2="')}" class="k-ink" stroke-width="2"/>`}
+  [['12',90],['3',0],['6',-90],['9',180]].forEach(([s,a])=>g+=T(cx+(r-20)*Math.cos(a*D),cy-(r-20)*Math.sin(a*D)+5,s,'s-muted'));
+  g+=`<line x1="${cx}" y1="${cy}" x2="${cx}" y2="${cy-58}" class="k-muted" stroke-width="3" stroke-dasharray="4 3"/>`;
+  g+=`<line x1="${cx}" y1="${cy}" x2="${P(cx+58*Math.cos(-30*D),cy-58*Math.sin(-30*D)).replace(' ','" y2="')}" class="k-acc" stroke-width="4" stroke-linecap="round"/><circle cx="${cx}" cy="${cy}" r="4" class="s-ink"/>`;
+  g+=T(cx+30,cy-18,'120°','s-acc2');
+  g+=T(130,190,'20 menit = 1/3 putaran');
+  return `<svg viewBox="0 0 260 200">${g}</svg>`;
+}
+function wheelFig(){
+  const cx=110,cy=95,r=58;let g=`<circle cx="${cx}" cy="${cy}" r="${r}" class="s-tint2 k-ink" stroke-width="5"/>`;
+  for(let i=0;i<8;i++){const a=i*45*D;g+=`<line x1="${cx}" y1="${cy}" x2="${P(cx+r*Math.cos(a),cy-r*Math.sin(a)).replace(' ','" y2="')}" class="k-ink" stroke-width="1.5"/>`}
+  g+=`<circle cx="${cx}" cy="${cy}" r="7" class="s-ink"/>`;
+  g+=`<path d="${arc(cx,cy,r+14,20,330)}" class="s-none k-acc" stroke-width="3"/>`;
+  const ax=cx+(r+14)*Math.cos(330*D),ay=cy-(r+14)*Math.sin(330*D);
+  g+=`<polygon points="${P(ax-4,ay-9)} ${P(ax+9,ay+1)} ${P(ax-7,ay+6)}" class="s-acc"/>`;
+  g+=T(222,80,'× 3','s-acc')+T(222,104,'putaran','s-ink','middle','500');
+  g+=T(130,192,'3 × 2π = 6π rad = 1.080°');
+  return `<svg viewBox="0 0 260 200">${g}</svg>`;
+}
+function rtri(c){
+  const W=260,H=180, s=Math.min(170/c.w,118/c.h), Ax=(W-c.w*s)/2-8, Ay=148, Cx=Ax+c.w*s, By=Ay-c.h*s;
+  const hl=c.hl||{};
+  const sd=(k,x1,y1,x2,y2)=>`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" class="side${hl[k]==='n'?' hn':hl[k]==='d'?' hd':''}"/>`;
+  let g=`<polygon points="${Ax},${Ay} ${Cx},${Ay} ${Cx},${By}" class="s-tint2" opacity=".6"/>`;
+  g+=sd('AC',Ax,Ay,Cx,Ay)+sd('BC',Cx,Ay,Cx,By)+sd('AB',Ax,Ay,Cx,By);
+  g+=`<polyline points="${Cx-11},${Ay} ${Cx-11},${Ay-11} ${Cx},${Ay-11}" class="s-none k-ink" stroke-width="1.5"/>`;
+  const al=Math.atan2(c.h,c.w)/D;
+  if(c.angA){g+=`<path d="${arc(Ax,Ay,26,0,al)}" class="s-none k-acc" stroke-width="3"/>`+T(Ax+31,Ay-6,c.angA,'s-acc','start')}
+  if(c.angB){g+=`<path d="${arc(Cx,By,22,180+al,270)}" class="s-none k-acc" stroke-width="3"/>`+T(Cx-8,By+38,c.angB,'s-acc','end')}
+  const v=c.v||['A','C','B'];
+  g+=T(Ax-6,Ay+16,v[0])+T(Cx+8,Ay+16,v[1])+T(Cx+8,By+2,v[2],'s-ink','start');
+  g+=T((Ax+Cx)/2,Ay+18,c.sAC,'s-ink','middle','500')+T(Cx+8,(Ay+By)/2+5,c.sBC,'s-ink','start','500')+T((Ax+Cx)/2-10,(Ay+By)/2-6,c.sAB,'s-ink','end','500');
+  if(c.cap) g+=T(130,14,c.cap,'s-muted','middle','500');
+  return `<svg viewBox="0 0 ${W} ${H}">${g}</svg>`;
+}
+function scene(kind){
+  const gy=160;let g=`<rect x="0" y="${gy}" width="280" height="30" class="s-tint2"/><line x1="0" y1="${gy}" x2="280" y2="${gy}" class="k-ink" stroke-width="2"/>`;
+  if(kind==='flag'){
+    const ox=60,ey=140,px=170,ty=30;
+    g+=`<line x1="${px}" y1="${gy}" x2="${px}" y2="${ty-6}" class="k-ink" stroke-width="4"/><polygon points="${px},${ty-6} ${px+36},${ty+4} ${px},${ty+14}" class="s-acc"/>`;
+    g+=`<line x1="${ox}" y1="${gy}" x2="${ox}" y2="${ey}" class="k-ink" stroke-width="3"/><circle cx="${ox}" cy="${ey-5}" r="5" class="s-ink"/>`;
+    g+=`<line x1="${ox}" y1="${ey}" x2="${px}" y2="${ey}" class="k-muted" stroke-dasharray="5 4"/><line x1="${ox}" y1="${ey}" x2="${px}" y2="${ty}" class="k-acc" stroke-width="2.5"/>`;
+    g+=`<path d="${arc(ox,ey,28,0,45)}" class="s-none k-acc" stroke-width="2.5"/>`+T(ox+34,ey-8,'45°','s-acc','start');
+    g+=T((ox+px)/2,gy+20,'15 m')+T(ox-8,ey+14,'1,5 m','s-ink','end','500')+T(px+8,(ey+ty)/2+20,'x','s-acc2','start')+T(px+8,ty+40,'tinggi ?','s-ink','start','500');
+  }
+  if(kind==='light'){
+    const lx=46,ty=40,sx=lx+120/Math.tan(30*D);
+    g+=`<polygon points="${lx-14},${gy} ${lx+14},${gy} ${lx+8},${ty} ${lx-8},${ty}" class="s-surf k-ink" stroke-width="2"/><rect x="${lx-10}" y="${ty-12}" width="20" height="12" class="s-acc"/>`;
+    g+=`<line x1="${lx}" y1="${ty}" x2="275" y2="${ty}" class="k-muted" stroke-dasharray="5 4"/><line x1="${lx}" y1="${ty}" x2="${sx}" y2="${gy-4}" class="k-acc" stroke-width="2.5"/>`;
+    g+=`<path d="${arc(lx,ty,44,-30,0)}" class="s-none k-acc" stroke-width="2.5"/>`+T(lx+52,ty+20,'30°','s-acc','start');
+    g+=`<path d="M${sx-13} ${gy-4} L${sx+13} ${gy-4} L${sx+8} ${gy+4} L${sx-8} ${gy+4} Z" class="s-ink"/>`;
+    g+=`<path d="${arc(sx,gy-4,24,150,180)}" class="s-none k-acc2" stroke-width="2"/>`+T(sx-69,148,'30°','s-acc2');
+    g+=T(lx+20,(gy+ty)/2,'40 m','s-ink','start')+T((lx+sx)/2,gy+20,'x ?','s-acc2');
+  }
+  if(kind==='ladder'){
+    const wx=200,L=140,bx=wx-L*Math.cos(60*D),ty=gy-L*Math.sin(60*D);
+    g+=`<rect x="${wx}" y="14" width="26" height="${gy-14}" class="s-surf k-ink" stroke-width="2"/>`;
+    g+=`<line x1="${bx}" y1="${gy}" x2="${wx}" y2="${ty}" class="k-acc" stroke-width="7" stroke-linecap="round"/>`;
+    g+=`<path d="${arc(bx,gy,28,0,60)}" class="s-none k-ink" stroke-width="2"/>`+T(bx+32,gy-8,'60°','s-ink','start');
+    g+=`<line x1="${wx-4}" y1="${gy}" x2="${wx-4}" y2="${ty}" class="k-acc2" stroke-width="3"/>`+T(wx-10,(gy+ty)/2+20,'h ?','s-acc2','end');
+    g+=T((bx+wx)/2-24,(gy+ty)/2-4,'6 m','s-acc','end')+T((bx+wx)/2,gy+20,'b ?','s-acc2');
+  }
+  if(kind==='kite'){
+    const ox=40,oy=gy-14,Lp=200,kx=ox+Lp*Math.cos(30*D),ky=oy-Lp*Math.sin(30*D);
+    g+=`<line x1="${ox}" y1="${gy}" x2="${ox}" y2="${oy}" class="k-ink" stroke-width="3"/><circle cx="${ox}" cy="${oy-6}" r="5" class="s-ink"/>`;
+    g+=`<line x1="${ox}" y1="${oy}" x2="${kx}" y2="${ky}" class="k-acc" stroke-width="2"/><line x1="${ox}" y1="${oy}" x2="${kx}" y2="${oy}" class="k-muted" stroke-dasharray="5 4"/>`;
+    g+=`<polygon points="${kx},${ky-16} ${kx+11},${ky} ${kx},${ky+18} ${kx-11},${ky}" class="s-acc2"/>`;
+    g+=`<line x1="${kx}" y1="${ky+18}" x2="${kx}" y2="${gy}" class="k-muted" stroke-dasharray="3 3"/>`;
+    g+=`<path d="${arc(ox,oy,32,0,30)}" class="s-none k-acc" stroke-width="2.5"/>`+T(ox+38,oy-6,'30°','s-acc','start');
+    g+=T((ox+kx)/2-6,(oy+ky)/2-8,'80 m','s-acc','end')+T(kx-8,(ky+gy)/2+20,'tinggi ?','s-ink','end','500');
+  }
+  return `<svg viewBox="0 0 280 190">${g}</svg>`;
+}
+const R5='√5', R3='√3', R2='√2';
+const FIG={
+  m1:[()=>sectorFig(45.5,'45°30′ = 45,5°'),()=>sectorFig(12.25,'12,25° = 12°15′'),()=>sectorFig(2.5/D,'θ = s / r = 20 / 8',{arc:'s = 20 cm',r:'r = 8 cm'}),clockFig],
+  m2:[()=>sectorFig(210,'210° = 7π/6 rad'),()=>sectorFig(75,'5π/12 rad = 75°'),()=>sectorFig(1.5/D,'1,5 rad ≈ 85,99°',{th:'1,5'}),wheelFig],
+  m3:[()=>rtri({w:8,h:15,v:['P','Q','R'],sAC:'8',sBC:'15',sAB:'17',angA:'P',hl:{BC:'n',AB:'d'},cap:'acuan sudut P'}),
+      ()=>rtri({w:8,h:15,v:['P','Q','R'],sAC:'8',sBC:'15',sAB:'17',angB:'R',hl:{AC:'n',AB:'d'},cap:'acuan sudut R'}),
+      ()=>rtri({w:3,h:4,sAC:'samping 3',sBC:'depan 4',sAB:'miring 5',angA:'α',hl:{AB:'n',AC:'d'},cap:'cos α = 3/5 → sec α = 5/3'})],
+  m4:[()=>rtri({w:4,h:3,sAC:'samping 4',sBC:'depan 3',sAB:'miring 5 ?',angA:'α',cap:'tan α = 3/4'}),
+      ()=>rtri({w:Math.sqrt(5),h:2,sAC:'samping '+R5+' ?',sBC:'depan 2',sAB:'miring 3',angA:'α',cap:'sin α = 2/3'}),
+      ()=>rtri({w:Math.sqrt(3),h:1,sAC:R3,sBC:'1',sAB:'2',angA:'30°',angB:'60°',cap:'segitiga 30°–60°–90°'})+rtri({w:1,h:1,sAC:'1',sBC:'1',sAB:R2,angA:'45°',angB:'45°',cap:'segitiga 45°–45°–90°'})],
+  m5:[()=>scene('flag'),()=>scene('light'),()=>scene('ladder'),()=>scene('kite')]
+};
+Object.entries(FIG).forEach(([k,fs])=>{
+  $$('#'+k+' .ex').forEach((ex,i)=>{
+    if(!fs[i])return;
+    const t=document.createElement('div');t.className='ex-t';
+    while(ex.firstChild)t.appendChild(ex.firstChild);
+    const f=document.createElement('div');f.className='ex-fig';f.innerHTML=fs[i]();
+    ex.classList.add('hasfig');ex.append(t,f);
+  });
+});
+/* Gambar Pythagoras: persegi pada tiap sisi */
+(function(){
+  const s=22, C=[92,178], A=[C[0]+4*s,C[1]], B=[C[0],C[1]-3*s];
+  const sq=(p,u,v,n,cls)=>{let g=`<polygon points="${P(...p)} ${P(p[0]+u[0],p[1]+u[1])} ${P(p[0]+u[0]+v[0],p[1]+u[1]+v[1])} ${P(p[0]+v[0],p[1]+v[1])}" class="${cls}" opacity=".7"/>`;
+    for(let i=1;i<n;i++){const a=[p[0]+u[0]*i/n,p[1]+u[1]*i/n],b=[p[0]+v[0]*i/n,p[1]+v[1]*i/n];
+      g+=`<line x1="${a[0]}" y1="${a[1]}" x2="${a[0]+v[0]}" y2="${a[1]+v[1]}" class="k-line"/><line x1="${b[0]}" y1="${b[1]}" x2="${b[0]+u[0]}" y2="${b[1]+u[1]}" class="k-line"/>`}
+    return g+`<polygon points="${P(...p)} ${P(p[0]+u[0],p[1]+u[1])} ${P(p[0]+u[0]+v[0],p[1]+u[1]+v[1])} ${P(p[0]+v[0],p[1]+v[1])}" class="s-none k-ink" stroke-width="1.5"/>`};
+  let g='';
+  g+=sq(C,[A[0]-C[0],0],[0,4*s],4,'s-tint2');
+  g+=sq(C,[0,B[1]-C[1]],[-3*s,0],3,'s-tint2');
+  g+=sq(A,[B[0]-A[0],B[1]-A[1]],[66,-88],5,'s-tint');
+  g+=`<polygon points="${P(...A)} ${P(...C)} ${P(...B)}" class="s-surf"/>`;
+  g+=`<line x1="${C[0]}" y1="${C[1]}" x2="${A[0]}" y2="${A[1]}" class="side hd"/><line x1="${C[0]}" y1="${C[1]}" x2="${B[0]}" y2="${B[1]}" class="side hd"/><line x1="${A[0]}" y1="${A[1]}" x2="${B[0]}" y2="${B[1]}" class="side hn"/>`;
+  g+=`<polyline points="${C[0]+11},${C[1]} ${C[0]+11},${C[1]-11} ${C[0]},${C[1]-11}" class="s-none k-ink" stroke-width="1.5"/>`;
+  g+=T(C[0]-8,C[1]+16,'C','s-ink','end')+T(A[0]+6,A[1]+16,'A','s-ink','start')+T(B[0]-6,B[1]-6,'B','s-ink','end');
+  g+=T(C[0]+10,(C[1]+B[1])/2+5,'a','s-acc2','start')+T((C[0]+A[0])/2+20,C[1]-8,'b','s-acc2')+T((A[0]+B[0])/2-12,(A[1]+B[1])/2+5,'c','s-acc');
+  g+=T(C[0]-33,(C[1]+B[1])/2+5,'a² = 9')+T((C[0]+A[0])/2,C[1]+50,'b² = 16')+T((A[0]+B[0])/2+33,(A[1]+B[1])/2-40,'c² = 25');
+  $('#pyFig').innerHTML=`<svg viewBox="0 0 270 270" role="img" aria-label="Segitiga siku-siku ABC dengan persegi pada setiap sisi: a kuadrat 9, b kuadrat 16, c kuadrat 25">${g}</svg>`;
+})();
+
+/* ---------- Mesin soal ---------- */
+function parseNum(s){
+  s=String(s).trim().replace(/\s/g,'').replace(',', '.');
+  if(!s)return NaN;
+  if(s.includes('/')){const[p,q]=s.split('/');return parseFloat(p)/parseFloat(q)}
+  return parseFloat(s);
+}
+const TYPE={pg:'Pilihan ganda',isian:'Isian',bs:'Benar–salah',jodoh:'Menjodohkan'};
+function renderQ(q,i,host,onDone){
+  const el=document.createElement('div');el.className='qcard';
+  let body=`<div class="qh"><span class="num">${String(i+1).padStart(2,'0')}</span><span class="tag">${TYPE[q.t]}</span></div><div>${q.q}</div>`;
+  if(q.fig) body+=`<div style="max-width:300px">${q.fig}</div>`;
+  if(q.t==='pg') body+=`<div class="opts">${q.o.map((o,j)=>`<button class="opt" data-j="${j}"><span class="l">${'ABCDE'[j]}</span><span>${o}</span></button>`).join('')}</div>`;
+  if(q.t==='bs') body+=`<div class="btnrow"><button class="opt" data-j="1"><span>Benar</span></button><button class="opt" data-j="0"><span>Salah</span></button></div>`;
+  if(q.t==='isian') body+=`<div class="inrow"><input type="text" inputmode="decimal" id="${q.id}" placeholder="jawaban" style="width:150px" aria-label="Jawaban soal ${i+1}">${q.unit?`<span>${q.unit}</span>`:''}</div>`;
+  if(q.t==='jodoh'){
+    const rights=shuffle(q.p.map(p=>p[1]));
+    body+=`<div style="display:grid;gap:8px">${q.p.map((p,j)=>`<div class="jrow"><span>${p[0]}</span><select id="${q.id}-${j}" aria-label="Pasangan untuk ${p[0].replace(/<[^>]+>/g,'')}"><option value="">— pilih —</option>${rights.map(r=>`<option>${r}</option>`).join('')}</select></div>`).join('')}</div>`;
+  }
+  body+=`<div><button class="primary chk">Periksa jawaban</button></div><div class="fbh"></div>`;
+  el.innerHTML=body;host.appendChild(el);
+  let sel=null;
+  el.querySelectorAll('.opt').forEach(b=>b.addEventListener('click',()=>{if(el.dataset.done)return;sel=+b.dataset.j;el.querySelectorAll('.opt').forEach(x=>x.classList.toggle('sel',x===b))}));
+  el.querySelector('.chk').addEventListener('click',()=>{
+    if(el.dataset.done)return;
+    let ok=false;
+    if(q.t==='pg'||q.t==='bs'){
+      if(sel===null){el.querySelector('.fbh').innerHTML='<p style="margin:0;color:var(--muted)">Pilih salah satu jawaban dulu.</p>';return}
+      const ans=q.t==='bs'?(q.a?1:0):q.a; ok=sel===ans;
+      el.querySelectorAll('.opt').forEach(x=>{const j=+x.dataset.j;x.classList.remove('sel');if(j===ans)x.classList.add('ok');else if(j===sel)x.classList.add('no')});
+    } else if(q.t==='isian'){
+      const inp=el.querySelector('input');const v=parseNum(inp.value);
+      if(isNaN(v)){el.querySelector('.fbh').innerHTML='<p style="margin:0;color:var(--muted)">Tulis jawaban berupa angka.</p>';return}
+      ok=q.a.some(x=>Math.abs(v-x)<=(q.tol??1e-6));inp.disabled=true;
+    } else {
+      const sels=q.p.map((p,j)=>el.querySelector(`#${q.id}-${j}`));
+      if(sels.some(s=>!s.value)){el.querySelector('.fbh').innerHTML='<p style="margin:0;color:var(--muted)">Lengkapi semua pasangan dulu.</p>';return}
+      ok=sels.every((s,j)=>s.value===q.p[j][1]);sels.forEach(s=>s.disabled=true);
+    }
+    el.dataset.done=1;el.querySelector('.chk').disabled=true;
+    el.querySelector('.fbh').innerHTML=`<div class="fb ${ok?'ok':'no'}"><b class="t">${ok?'Benar!':'Belum tepat.'}</b>${q.s}</div>`;
+    el.classList.add(ok?'good':'bad');sfx(ok?'ok':'no');
+    if(ok){const r=el.getBoundingClientRect();burst(r.left+r.width/2,Math.max(r.top+30,40),26,.8)}
+    onDone&&onDone(ok);
+  });
+}
+const triFig=`<svg viewBox="0 0 220 150"><polygon points="20,130 180,130 180,20" class="s-tint2"/><polyline points="20,130 180,130 180,20 20,130" class="s-none k-ink" stroke-width="2.5"/><polyline points="168,130 168,118 180,118" class="s-none k-ink" stroke-width="1.5"/><text x="8" y="146" class="s-ink" font-weight="700">A</text><text x="186" y="146" class="s-ink" font-weight="700">C</text><text x="186" y="20" class="s-ink" font-weight="700">B</text><text x="100" y="146" text-anchor="middle" class="s-ink">8</text><text x="188" y="80" class="s-ink">6</text><text x="90" y="66" text-anchor="end" class="s-ink">10</text></svg>`;
+
+const CQ={
+ m1:[{t:'pg',q:'Besar sudut satu putaran penuh dalam radian adalah …',o:['π rad','2π rad','360 rad','180 rad'],a:1,s:'Keliling lingkaran 2πr memuat 2π jari-jari, jadi satu putaran = 2π rad.'},
+     {t:'bs',q:'1° sama dengan 60 menit (60′).',a:true,s:'Benar. 1° = 60′ dan 1′ = 60″.'}],
+ m2:[{t:'isian',id:'cq21',q:`${fr('5π','4')} rad = … °`,unit:'°',a:[225],tol:.01,s:`${fr('5 × 180°','4')} = 225°.`},
+     {t:'pg',q:'60° dalam radian adalah …',o:[fr('π','6'),fr('π','4'),fr('π','3'),fr('π','2')],a:2,s:`60 × ${fr('π','180')} = ${fr('π','3')} rad.`}],
+ m3:[{t:'pg',q:'Cosecan α adalah kebalikan dari …',o:['cos α','sin α','tan α','sec α'],a:1,s:'csc α = 1/sin α = miring/depan.'},
+     {t:'bs',q:'Nilai sin 30° pada segitiga besar lebih besar daripada sin 30° pada segitiga kecil.',a:false,s:'Salah. Segitiga dengan sudut sama adalah sebangun, perbandingan sisinya sama, sehingga nilai rasio tidak bergantung pada ukuran.'}],
+ m4:[{t:'isian',id:'cq41',q:'Segitiga siku-siku memiliki sisi depan 5 dan sisi samping 12 terhadap sudut α. Nilai cos α = … (tulis pecahan, misalnya 3/5)',a:[12/13],tol:.002,s:'miring = √(5² + 12²) = 13. cos α = samping/miring = 12/13.'},
+     {t:'pg',q:'Nilai tan 60° adalah …',o:['½','½√3','√3','⅓√3'],a:2,s:'Dari segitiga 30°–60°–90° dengan sisi 1 : √3 : 2, tan 60° = √3/1 = √3.'}],
+ m5:[{t:'pg',q:'Sudut yang dibentuk garis horizontal dengan garis pandang ke atas menuju objek disebut sudut …',o:['depresi','elevasi','siku-siku','refleks'],a:1,s:'Melihat ke atas: sudut elevasi. Melihat ke bawah: sudut depresi.'},
+     {t:'isian',id:'cq52',q:'Seseorang berdiri 12 m dari sebuah tiang dan melihat puncaknya dengan sudut elevasi 45°. Jika tinggi mata diabaikan, tinggi tiang = … m',unit:'m',a:[12],tol:.01,s:'tinggi = 12 · tan 45° = 12 · 1 = 12 m.'}]
+};
+Object.entries(CQ).forEach(([k,qs])=>{const host=$('#cq-'+k);qs.forEach((q,i)=>renderQ(q,i,host))});
+
+const LQ=[
+ {t:'pg',q:'1 radian kira-kira sama dengan …',o:['1°','45°','57,3°','90°','180°'],a:2,s:'1 rad = 180°/π ≈ 180/3,1416 ≈ 57,3°.'},
+ {t:'pg',q:'Besar sudut 150° dalam radian adalah …',o:[fr('2π','3'),fr('3π','4'),fr('5π','6'),fr('5π','3'),fr('7π','6')],a:2,s:`150 × ${fr('π','180')} = ${fr('150π','180')} = ${fr('5π','6')} rad.`},
+ {t:'isian',id:'l3',q:`Ubah ${fr('4π','9')} rad ke derajat.`,unit:'°',a:[80],tol:.01,s:`${fr('4 × 180°','9')} = ${fr('720°','9')} = 80°.`},
+ {t:'bs',q:'2π rad = 180°.',a:false,s:'Salah. 2π rad = 360°; yang benar π rad = 180°.'},
+ {t:'isian',id:'l5',q:'72° = kπ rad. Nilai k adalah … (boleh pecahan atau desimal)',a:[.4],tol:.001,s:`72 × ${fr('π','180')} = ${fr('72π','180')} = ${fr('2π','5')}, jadi k = 2/5 = 0,4.`},
+ {t:'jodoh',id:'l7',q:'Jodohkan setiap rasio dengan perbandingan sisinya terhadap sudut α.',p:[['sin α','depan / miring'],['cos α','samping / miring'],['tan α','depan / samping'],['csc α','miring / depan'],['cot α','samping / depan']],s:'Sin-demi, Cos-sami, Tan-desa. csc, sec, cot adalah kebalikan dari sin, cos, tan.'},
+ {t:'pg',q:'Perhatikan segitiga ABC siku-siku di C. Nilai sin A adalah …',fig:triFig,o:[fr('3','5'),fr('4','5'),fr('3','4'),fr('4','3'),fr('5','3')],a:0,s:'Terhadap sudut A: depan = BC = 6, miring = AB = 10. sin A = 6/10 = 3/5.'},
+ {t:'isian',id:'l9',q:'Dari segitiga ABC pada soal sebelumnya, nilai tan A = … (tulis pecahan atau desimal)',a:[.75],tol:.001,s:'tan A = depan/samping = BC/AC = 6/8 = 3/4 = 0,75.'},
+ {t:'pg',q:`Jika sin α = ${fr('5','13')} dan α lancip, maka cos α = …`,o:[fr('5','12'),fr('12','13'),fr('13','12'),fr('12','5'),fr('13','5')],a:1,s:'depan = 5, miring = 13, samping = √(169 − 25) = 12. cos α = 12/13.'},
+ {t:'isian',id:'l11',q:`Masih dengan sin α = ${fr('5','13')}, nilai sec α = … (tulis pecahan)`,a:[13/12],tol:.001,s:'sec α = 1/cos α = 13/12.'},
+ {t:'bs',q:'cot 45° = 1.',a:true,s:'Benar. tan 45° = 1, sehingga cot 45° = 1/1 = 1.'},
+ {t:'pg',q:'Nilai sin 30° + cos 60° − tan 45° adalah …',o:['−1','0','½','1','2'],a:1,s:'½ + ½ − 1 = 0.'},
+ {t:'isian',id:'l14',q:'Sebuah tangga sepanjang 10 m bersandar pada dinding dan membentuk sudut 60° dengan lantai. Tinggi ujung atas tangga dari lantai = … m (gunakan √3 ≈ 1,732, bulatkan 2 desimal)',unit:'m',a:[8.66],tol:.02,s:'h = 10 · sin 60° = 10 · ½√3 = 5√3 ≈ 8,66 m.'},
+ {t:'isian',id:'l15',q:'Dari puncak mercusuar setinggi 60 m, sebuah kapal terlihat dengan sudut depresi 30°. Jarak kapal ke kaki mercusuar = … m (√3 ≈ 1,732, bulatkan 2 desimal)',unit:'m',a:[103.92],tol:.05,s:'tan 30° = 60/x → x = 60/(⅓√3) = 60√3 ≈ 103,92 m.'},
+ {t:'pg',q:'Benang layang-layang sepanjang 50 m membentuk sudut 30° dengan tanah. Jika tinggi tangan pemegang 1,5 m, tinggi layang-layang dari tanah adalah …',o:['25 m','26,5 m','43,3 m','44,8 m','51,5 m'],a:1,s:'Tinggi di atas tangan = 50 · sin 30° = 25 m. Ditambah tinggi tangan 1,5 m menjadi 26,5 m.'}
+];
+let L={done:0,score:0};
+function buildL(){
+  L={done:0,score:0};$('#lList').innerHTML='';$('#lResult').hidden=true;
+  LQ.forEach((q,i)=>renderQ(q,i,$('#lList'),ok=>{
+    L.done++;if(ok)L.score++;
+    $('#lDone').textContent=L.done;$('#lScore').textContent=Math.round(L.score/LQ.length*100);
+    $('#lBar').style.width=(L.done/LQ.length*100)+'%';
+    if(L.done===LQ.length)showResult();
+  }));
+  $('#lDone').textContent=0;$('#lScore').textContent=0;$('#lBar').style.width='0';
+}
+function showResult(){
+  const n=Math.round(L.score/LQ.length*100), nm=$('#lName').value.trim();
+  $('#lBig').textContent=n;
+  const [p,m]=n>=90?['Sangat baik','Kamu menguasai satuan sudut, rasio trigonometri, dan penerapannya.']:n>=75?['Baik','Sebagian besar konsep sudah dikuasai. Tinjau lagi soal yang belum tepat.']:n>=60?['Cukup','Ulangi simulasi Materi 03 dan 04, lalu coba latihan sekali lagi.']:['Perlu belajar lagi','Pelajari kembali materi dari awal dan gunakan simulasi untuk memeriksa pemahamanmu.'];
+  $('#lPred').textContent=(nm?nm+' · ':'')+p+` (${L.score} dari ${LQ.length} benar)`;$('#lMsg').textContent=m;
+  $('#lResult').hidden=false;
+  setTimeout(()=>{sfx('win');burst(innerWidth/2,innerHeight*.45,140,1.4)},500);
+}
+$('#lReset').addEventListener('click',()=>{buildL();window.scrollTo(0,$('#latihan').offsetTop)});
+buildL();
+
+/* ---------- Refleksi ---------- */
+const TPS=['Memahami satuan sudut derajat dan radian','Mengubah derajat ke radian dan sebaliknya','Memahami enam rasio trigonometri','Menghitung rasio trigonometri','Menyelesaikan masalah dengan rasio trigonometri'];
+const LV=['Belum paham','Cukup paham','Sudah paham'];
+const rf=TPS.map(()=>null);
+$('#rfList').innerHTML=TPS.map((t,i)=>`<div class="rf-row"><span>${t}</span><div class="btnrow lv" data-i="${i}">${LV.map((l,j)=>`<button data-j="${j}">${l}</button>`).join('')}</div></div>`).join('');
+$$('.lv').forEach(row=>row.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{
+  const i=+row.dataset.i,j=+b.dataset.j;rf[i]=j;row.querySelectorAll('button').forEach(x=>x.className=x===b?'on'+j:'')})));
+$('#rfBtn').addEventListener('click',()=>{
+  const nm=$('#lName').value.trim(), out=$('#rfOut');
+  const sc=L.done===LQ.length?`${Math.round(L.score/LQ.length*100)} (${L.score} dari ${LQ.length} benar)`:(L.done?`${L.done} dari ${LQ.length} soal dikerjakan`:'belum dikerjakan');
+  const weak=rf.map((v,i)=>v===0?i:-1).filter(i=>i>=0), empty=rf.filter(v=>v===null).length;
+  let h=`<div class="kicker">Ringkasan refleksi</div><h3 style="margin-top:4px">${nm||'Siswa'}</h3><p style="margin:.2em 0">Latihan soal: <b>${sc}</b></p>`;
+  h+=`<dl class="read">${TPS.map((t,i)=>`<dt>${t}</dt><dd>${rf[i]===null?'—':LV[rf[i]]}</dd>`).join('')}</dl>`;
+  const ans=[1,2,3,4,5].map(k=>$('#rf'+k).value.trim());
+  if(ans.some(Boolean)) h+=`<div style="margin-top:10px">${ans.map((a,k)=>a?`<p style="margin:.3em 0"><b>${k+1}.</b> ${a.replace(/</g,'&lt;')}</p>`:'').join('')}</div>`;
+  if(empty) h+=`<p style="color:var(--muted)">${empty} pernyataan belum kamu nilai.</p>`;
+  if(weak.length) h+=`<div class="box" style="margin-top:10px"><b>Saran:</b> pelajari lagi ${weak.map(i=>`<a href="#m${i+1}">Materi 0${i+1}</a>`).join(', ')}, lalu gunakan simulasinya dan kerjakan cek cepat sampai benar.</div>`;
+  else if(!empty) h+=`<div class="box teal" style="margin-top:10px"><b>Hebat!</b> Pertahankan. Coba tantang dirimu dengan simulasi Juru Ukur pada nilai sudut dan jarak yang berbeda.</div>`;
+  out.innerHTML=h;out.hidden=false;sfx('win');burst(innerWidth/2,innerHeight*.4,90,1.1);out.scrollIntoView({behavior:'smooth',block:'start'});
+});
+
+/* salin email */
+$('#copyMail').addEventListener('click',()=>{
+  const t=$('#mail').textContent;
+  const sel=()=>{const r=document.createRange();r.selectNodeContents($('#mail'));const s=getSelection();s.removeAllRanges();s.addRange(r)};
+  try{navigator.clipboard.writeText(t).then(()=>{$('#copyMail').textContent='Tersalin'},sel)}catch(e){sel()}
+});
+
+route();
+})();
+</script>
+
+</body></html>
